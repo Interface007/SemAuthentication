@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Sem.Authentication.MvcHelper</id>
+        <version>1.0.0</version>
+        <title>SEM Authentication Extensions</title>
+        <authors>Sven Erik Matzen</authors>
+        <owners>sem@svenerikmatzen.info</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>The packages contains extension methods that profide attributes and helper methods to include additional authentication checks with the YubiKey. I plan to add more different interchangable authentication methods.</description>
+        <copyright>(c) 2013 Sven Erik Matzen</copyright>
+        <language>en-US</language>
+        <tags>Yubico Yubikey Authentication 2-factor two-factor</tags>
+        <dependencies>
+            <dependency id="YubicoDotNetClient" version="1.0.0.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\..\Sem.Yubikey.MvcHelper\NuGet\ReadMe.txt" target="Documentation\ReadMe.txt" />
+        <file src="..\YubiKey.xml" target="Documentation\YubiKey.xml" />
+        <file src="..\bin\Debug\Sem.Authentication.MvcHelper.dll" target="lib\net45\Sem.Authentication.MvcHelper.dll" />
+    </files>
+</package>

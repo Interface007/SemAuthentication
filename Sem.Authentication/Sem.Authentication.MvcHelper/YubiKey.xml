@@ -1,0 +1,8 @@
+﻿<YubikeyConfiguration>
+  <Server ApiKey="grJdi5EyZq4GGEhDsDKCh6E6Iqk="
+          ClientId="99999"
+          SyncLevel=""/>
+  <Users>
+    <User Name="SvenErik" ExternalId="ccccccbughkn" />
+  </Users>
+</YubikeyConfiguration>
