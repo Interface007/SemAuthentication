@@ -9,7 +9,6 @@
 
 namespace Sem.Authentication.MvcHelper
 {
-    using System;
     using System.Web;
     using System.Web.Mvc;
 
@@ -32,11 +31,6 @@ namespace Sem.Authentication.MvcHelper
                        "<input id=\"yubiKey\" name=\"yubiKey\" text=\"\"/>";
 
             return new HtmlString(text);
-        }
-
-        public static void On<T>(this T value, Func<T, bool> condition)
-        {
-            
         }
     }
 }

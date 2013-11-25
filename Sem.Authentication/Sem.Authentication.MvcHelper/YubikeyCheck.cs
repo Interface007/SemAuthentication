@@ -45,13 +45,15 @@ namespace Sem.Authentication.MvcHelper
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to process only the image request.
-        /// Since this control uses the simple URL without parameters and adds a unique value to compose a
-        /// request that returns the YUBIKEY-image, we need to deal with situations in which the action has 
-        /// been overloaded and the default action does not need YUBIKEY validation. In such a case you
-        /// might set this value to "true" and validation will be skipped.
+        /// Gets the name of the image to be returned for this authenticator.
         /// </summary>
-        public bool ImageOnly { get; set; }
+        protected override string ImageName
+        {
+            get
+            {
+                return "yubikey-finger.png";
+            }
+        }
 
         /// <summary>
         /// Called by the ASP.NET MVC framework before the action method executes.
@@ -59,24 +61,6 @@ namespace Sem.Authentication.MvcHelper
         /// <param name="filterContext">The filter context.</param>
         protected override void InternalAuthenticationCheck(ActionExecutingContext filterContext)
         {
-            var url = filterContext.HttpContext.Request.Url;
-            if (url != null && url.Query.Contains("42FE943EC8A64735A978D1F81D5FFD00"))
-            {
-                var assembly = this.GetType().Assembly;
-
-                // don't need to dispose this stream here, because the FileStreamResult will do that for us while writing to the response stream
-                // using the types namespace instead of a string will prevent issues with rename refacoring
-                var stream = assembly.GetManifestResourceStream(this.GetType().Namespace + ".Content.yubikey-finger.png");
-                filterContext.Result = new FileStreamResult(stream, "image/png");
-                return;
-            }
-
-            if (this.ImageOnly)
-            {
-                // since we tagged the attribute to ONLY provide the image, but NO validation, we can exit here
-                return;
-            }
-
             // to validate, we need the value of the key - have a look if we can find it.
             var parameters = filterContext.HttpContext.Request.Form;
             var containskey = parameters.Keys.OfType<string>().Contains("yubiKey");
