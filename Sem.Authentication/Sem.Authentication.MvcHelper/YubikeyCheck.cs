@@ -9,6 +9,7 @@
 
 namespace Sem.Authentication.MvcHelper
 {
+    using System;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -19,7 +20,7 @@ namespace Sem.Authentication.MvcHelper
     /// <summary>
     /// MVC filter attribute to add a request filter that does check for a YUBIKEY and its validity.
     /// </summary>
-    public class YubikeyCheck : ActionFilterAttribute
+    public class YubikeyCheck : AuthenticationCheck
     {
         /// <summary>
         /// The server configuration.
@@ -53,15 +54,10 @@ namespace Sem.Authentication.MvcHelper
         public bool ImageOnly { get; set; }
 
         /// <summary>
-        /// Gets or sets the action to call for an invalid key.
-        /// </summary>
-        public string InvalidKeyAction { get; set; }
-
-        /// <summary>
         /// Called by the ASP.NET MVC framework before the action method executes.
         /// </summary>
         /// <param name="filterContext">The filter context.</param>
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        protected override void InternalAuthenticationCheck(ActionExecutingContext filterContext)
         {
             var url = filterContext.HttpContext.Request.Url;
             if (url != null && url.Query.Contains("42FE943EC8A64735A978D1F81D5FFD00"))
@@ -96,7 +92,16 @@ namespace Sem.Authentication.MvcHelper
             client.SetApiKey(server.ApiKey);
             client.SetSync(server.SyncLevel);
 
-            var response = client.Verify(otp);
+            IYubicoResponse response;
+            try
+            {
+                response = client.Verify(otp);
+            }
+            catch (Exception ex)
+            {
+                throw new YubikeyInvalidResponseException(YubicoResponseStatus.BackendError, ex);
+            }
+
             if (response == null)
             {
                 throw new YubikeyNullResponseException();
@@ -104,18 +109,13 @@ namespace Sem.Authentication.MvcHelper
 
             var user = filterContext.HttpContext.User;
             var users = this.configuration.Users;
-            if (response.Status == YubicoResponseStatus.Ok && response.PublicId == users.FirstOrDefault(x => x.Name == user.Identity.Name).ExternalId)
+            if (response.Status == YubicoResponseStatus.Ok 
+             && response.PublicId == users.FirstOrDefault(x => x.Name == user.Identity.Name).ExternalId)
             {
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.InvalidKeyAction))
-            {
-                throw new YubikeyInvalidResponseException(response.Status);
-            }
-
-            var urlHelper = new UrlHelper(filterContext.RequestContext);
-            filterContext.Result = new RedirectResult(urlHelper.Action(this.InvalidKeyAction));
+            throw new YubikeyInvalidResponseException(response.Status);
         }
     }
 }

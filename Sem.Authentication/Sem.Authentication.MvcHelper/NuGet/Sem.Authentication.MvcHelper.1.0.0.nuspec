@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Sem.Authentication.MvcHelper</id>
-        <version>1.0.0</version>
+        <version>0.1.0</version>
         <title>SEM Authentication Extensions</title>
         <authors>Sven Erik Matzen</authors>
         <owners>sem@svenerikmatzen.info</owners>
@@ -16,7 +16,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\..\Sem.Yubikey.MvcHelper\NuGet\ReadMe.txt" target="Documentation\ReadMe.txt" />
         <file src="..\YubiKey.xml" target="Documentation\YubiKey.xml" />
         <file src="..\bin\Debug\Sem.Authentication.MvcHelper.dll" target="lib\net45\Sem.Authentication.MvcHelper.dll" />
     </files>

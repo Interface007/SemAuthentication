@@ -44,6 +44,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationCheck.cs" />
+    <Compile Include="Exceptions\AuthenticationFilterException.cs" />
     <Compile Include="Exceptions\YubikeyInvalidResponseException.cs" />
     <Compile Include="Exceptions\YubikeyNotPresentException.cs" />
     <Compile Include="Exceptions\YubikeyNullResponseException.cs" />
@@ -55,17 +57,14 @@
     <Compile Include="YubikeyExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\yubikey-finger.png" />
-    <Content Include="Scripts\jquery-2.0.3.intellisense.js" />
-    <Content Include="Scripts\jquery-2.0.3.js" />
-    <Content Include="Scripts\jquery-2.0.3.min.js" />
+    <EmbeddedResource Include="Content\yubikey-finger.png" />
+    <CodeAnalysisDictionary Include="Properties\Dictionary.xml" />
     <Content Include="YubiKey.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuGet\Sem.Authentication.MvcHelper.1.0.0.nupkg" />
     <None Include="NuGet\Sem.Authentication.MvcHelper.1.0.0.nuspec" />
     <None Include="packages.config" />
-    <None Include="Scripts\jquery-2.0.3.min.map" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

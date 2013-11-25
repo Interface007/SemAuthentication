@@ -9,12 +9,10 @@
 
 namespace Sem.Authentication.MvcHelper.Exceptions
 {
-    using System;
-
     /// <summary>
     /// The YUBIKEY null response exception will be thrown when the response of the validation is NULL.
     /// </summary>
-    public class YubikeyNullResponseException : Exception
+    public class YubikeyNullResponseException : AuthenticationFilterException
     {
     }
 }

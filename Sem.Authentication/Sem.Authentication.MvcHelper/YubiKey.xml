@@ -1,7 +1,13 @@
 ﻿<YubikeyConfiguration>
+  <!-- You will need to enter your YUBICO Client ID and the API-Key here to be able to 
+       query a validation server. Request the client ID and the key from the Yubico  web site. -->
   <Server ApiKey="grJdi5EyZq4GGEhDsDKCh6E6Iqk="
           ClientId="99999"
           SyncLevel=""/>
+  
+  <!-- Here you need to map the ASP.Net user name to an external Yubikey-ID (the first 12 
+       characters from a standard Yubikey token). Access will be granted only if this external
+       ID has been mapped to the current user. -->
   <Users>
     <User Name="SvenErik" ExternalId="ccccccbughkn" />
   </Users>

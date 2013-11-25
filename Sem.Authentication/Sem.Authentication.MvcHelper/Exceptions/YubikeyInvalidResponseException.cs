@@ -16,13 +16,24 @@ namespace Sem.Authentication.MvcHelper.Exceptions
     /// <summary>
     /// The YUBIKEY invalid response exception.
     /// </summary>
-    public class YubikeyInvalidResponseException : Exception
+    public class YubikeyInvalidResponseException : AuthenticationFilterException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="YubikeyInvalidResponseException"/> class.
         /// </summary>
         /// <param name="status"> The response status. </param>
         public YubikeyInvalidResponseException(YubicoResponseStatus status)
+        {
+            this.Status = status;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YubikeyInvalidResponseException"/> class.
+        /// </summary>
+        /// <param name="status"> The status. </param>
+        /// <param name="exception"> The exception. </param>
+        public YubikeyInvalidResponseException(YubicoResponseStatus status, Exception exception)
+            : base("Error while executing request.", exception)
         {
             this.Status = status;
         }
