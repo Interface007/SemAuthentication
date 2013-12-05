@@ -18,6 +18,20 @@ namespace Sem.Authentication.MvcHelper
     public abstract class AuthenticationCheck : ActionFilterAttribute
     {
         /// <summary>
+        /// The configuration.
+        /// </summary>
+        private readonly ConfigurationBase configuration;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthenticationCheck"/> class.
+        /// </summary>
+        /// <param name="configuration"> The configuration. </param>
+        protected AuthenticationCheck(ConfigurationBase configuration)
+        {
+            this.configuration = configuration;
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to process only the image request.
         /// Since this control uses the simple URL without parameters and adds a unique value to compose a
         /// request that returns the YUBIKEY-image, we need to deal with situations in which the action has 
@@ -32,9 +46,21 @@ namespace Sem.Authentication.MvcHelper
         public string InvalidKeyAction { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the token is known, but the current user identity does not need to match.
+        /// Setting this value to "true" might be useful in scenarios where only user logs in and a second must provide a token
+        /// value as a second authenticator.
+        /// </summary>
+        public bool SkipIdentityNameCheck { get; set; }
+
+        /// <summary>
         /// Gets the name of the image to be returned for this authenticator.
         /// </summary>
         protected abstract string ImageName { get; }
+
+        /// <summary>
+        /// Gets or sets the logger implementation.
+        /// </summary>
+        protected ISemAuthLogger Logger { get; set; }
 
         /// <summary>
         /// Called by the ASP.NET MVC framework before the action method executes.
@@ -64,9 +90,9 @@ namespace Sem.Authentication.MvcHelper
 
                 this.InternalAuthenticationCheck(filterContext);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //// TODO: implement logging of exceptions
+                this.Log(ex);
 
                 // if we don't know where to redirect to, we simply re-throw the exception
                 if (string.IsNullOrEmpty(this.InvalidKeyAction))
@@ -87,5 +113,30 @@ namespace Sem.Authentication.MvcHelper
         /// </summary>
         /// <param name="filterContext"> The filter context. </param>
         protected abstract void InternalAuthenticationCheck(ActionExecutingContext filterContext);
+
+        private void Log(Exception ex)
+        {
+            var logger = this.Logger ?? this.CreateLogger();
+            if (logger != null)
+            {
+                logger.Log(ex);
+            }
+        }
+
+        private ISemAuthLogger CreateLogger()
+        {
+            if (string.IsNullOrEmpty(this.configuration.Logger.TypeName))
+            {
+                return null;
+            }
+
+            var loggerType = Type.GetType(this.configuration.Logger.TypeName);
+            if (loggerType == null)
+            {
+                return null;
+            } 
+            
+            return this.Logger = (ISemAuthLogger)Activator.CreateInstance(loggerType);
+        }
     }
 }

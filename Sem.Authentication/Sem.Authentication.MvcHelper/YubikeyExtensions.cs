@@ -25,6 +25,8 @@ namespace Sem.Authentication.MvcHelper
         /// <returns> The <see cref="IHtmlString"/>. </returns>
         public static IHtmlString YubikeyInput(this HtmlHelper view, string targetAction)
         {
+            YubikeyConfiguration.DeserializeConfiguration().EnsureCorrectConfiguration();
+
             var imgUrl = targetAction + "?42FE943EC8A64735A978D1F81D5FFD00";
 
             var text = "<img alt=\"YubiKey: \" id=\"yubiKeyImage\" src=\"" + imgUrl + "\" />" +

@@ -17,7 +17,7 @@ namespace Sem.Authentication.MvcHelper
     /// <summary>
     /// The YUBIKEY configuration.
     /// </summary>
-    public class YubikeyConfiguration
+    public class YubikeyConfiguration : ConfigurationBase
     {
         /// <summary>
         /// Gets or sets the server configuration for validation.
@@ -40,6 +40,12 @@ namespace Sem.Authentication.MvcHelper
         {
             var serializer = new XmlSerializer(typeof(YubikeyConfiguration));
             var path = Path.Combine(HttpRuntime.AppDomainAppPath, "YubiKey.xml");
+
+            if (!File.Exists(path))
+            {
+                return new YubikeyConfiguration { Exception = new FileNotFoundException(string.Format("The configuration file YubiKey.xml cannot be found. You need to place this file into the path {0} to make this application work. Have a look at https://semauthentication.codeplex.com/ for details about this module.", HttpRuntime.AppDomainAppPath)) };
+            }
+
             using (var file = File.OpenRead(path))
             {
                 return (YubikeyConfiguration)serializer.Deserialize(file);

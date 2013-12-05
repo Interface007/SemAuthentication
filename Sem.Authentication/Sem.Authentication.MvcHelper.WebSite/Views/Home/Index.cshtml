@@ -1,0 +1,29 @@
+﻿@using Sem.Authentication.MvcHelper
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Sem.Authentication.MvcHelper</h1>
+    <p class="lead">This web site does implement samples on how to use the functionality of Sem.Authentication.MvcHelper.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>CodePlex</h2>
+        <p>The home of Sem.Authentication.MvcHelper is on CodePlex.</p>
+        <p><a class="btn btn-default" href="https://semauthentication.codeplex.com/">CodePlex &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Yubico Authentication</h2>
+        <p>
+            This MVC action is protected by an
+        </p>
+        <form method="POST" action="@Url.Action("YubikeyProtected")">
+            <p>
+                @Html.YubikeyInput(Url.Action("YubikeyProtected"))
+                <input type="submit" class="btn btn-default" value="try it &raquo;" />
+            </p>
+        </form>
+    </div>
+</div>

@@ -11,4 +11,9 @@
   <Users>
     <User Name="SvenErik" ExternalId="ccccccbughkn" />
   </Users>
+
+  <!-- You might provide a logger instance here - it just needs to implement the very simple 
+       interface ISemAuthLogger to map the calls from this library to the logging library
+       of your choice. -->
+  <Logger TypeName="Sem.Authentication.MvcHelper.DebugLogger, Sem.Authentication.MvcHelper" />
 </YubikeyConfiguration>

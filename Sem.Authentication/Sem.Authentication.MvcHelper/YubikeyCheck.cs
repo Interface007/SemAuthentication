@@ -40,6 +40,7 @@ namespace Sem.Authentication.MvcHelper
         /// </summary>
         /// <param name="configuration"> The configuration. </param>
         public YubikeyCheck(YubikeyConfiguration configuration)
+            : base(configuration)
         {
             this.configuration = configuration;
         }
@@ -51,6 +52,7 @@ namespace Sem.Authentication.MvcHelper
         {
             get
             {
+                this.configuration.EnsureCorrectConfiguration();
                 return "yubikey-finger.png";
             }
         }
@@ -61,6 +63,8 @@ namespace Sem.Authentication.MvcHelper
         /// <param name="filterContext">The filter context.</param>
         protected override void InternalAuthenticationCheck(ActionExecutingContext filterContext)
         {
+            this.configuration.EnsureCorrectConfiguration();
+
             // to validate, we need the value of the key - have a look if we can find it.
             var parameters = filterContext.HttpContext.Request.Form;
             var containskey = parameters.Keys.OfType<string>().Contains("yubiKey");
@@ -93,8 +97,12 @@ namespace Sem.Authentication.MvcHelper
 
             var user = filterContext.HttpContext.User;
             var users = this.configuration.Users;
+            
+            // the response must be OK 
+            // the name of the current http context identity must match, OR SkipIdentityNameCheck must be enabled
             if (response.Status == YubicoResponseStatus.Ok 
-             && response.PublicId == users.FirstOrDefault(x => x.Name == user.Identity.Name).ExternalId)
+             && ((this.SkipIdentityNameCheck && users.Any(x => x.ExternalId == response.PublicId))
+              || (users.FirstOrDefault(x => x.ExternalId == response.PublicId).Name == user.Identity.Name)))
             {
                 return;
             }
