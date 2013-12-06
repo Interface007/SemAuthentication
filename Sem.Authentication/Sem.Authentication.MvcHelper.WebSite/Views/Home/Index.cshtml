@@ -21,7 +21,8 @@
         </p>
         <form method="POST" action="@Url.Action("YubikeyProtected")">
             <p>
-                @Html.YubikeyInput(Url.Action("YubikeyProtected"))
+                @* The input box you might omit the action in this call, but then you will only get a span with the input element instead of the image and the input element *@
+                @Html.YubikeyInput("YubikeyProtected")
                 <input type="submit" class="btn btn-default" value="try it &raquo;" />
             </p>
         </form>
