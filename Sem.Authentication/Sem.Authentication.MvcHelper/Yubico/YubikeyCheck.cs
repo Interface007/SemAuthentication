@@ -10,9 +10,7 @@
 namespace Sem.Authentication.MvcHelper
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
 
     using Sem.Authentication.MvcHelper.Exceptions;
@@ -110,92 +108,6 @@ namespace Sem.Authentication.MvcHelper
             }
 
             throw new YubikeyInvalidResponseException(response.Status);
-        }
-    }
-
-    public class FastRequestsProtectionAttribute : ActionFilterAttribute
-    {
-        /// <summary>
-        /// The session statistics.
-        /// </summary>
-        private readonly ConcurrentDictionary<string, ClientStatistic> sessionStatistics = new ConcurrentDictionary<string, ClientStatistic>();
-
-        /// <summary>
-        /// The user host statistics.
-        /// </summary>
-        private readonly ConcurrentDictionary<string, ClientStatistic> userHostStatistics = new ConcurrentDictionary<string, ClientStatistic>();
-
-        /// <summary>
-        /// Called by the ASP.NET MVC framework before the action method executes.
-        /// Where we collect come information about the client request and update the statistics. We also will prevent further request processing by throwing exceptions
-        /// if the statists do tell us that this client is an attacker.
-        /// </summary>
-        /// <param name="filterContext">The filter context.</param>
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            // todo: null checks
-            var session = filterContext.RequestContext.HttpContext.Session;
-            if (session != null)
-            {
-                var sessionId = session.SessionID;
-                this.StatisticsGate(sessionId, this.sessionStatistics);
-            }
-
-            var userHost = filterContext.RequestContext.HttpContext.Request.UserHostAddress;
-            this.StatisticsGate(userHost, this.userHostStatistics);
-
-            base.OnActionExecuting(filterContext);
-        }
-
-        private void StatisticsGate(string sessionId, ConcurrentDictionary<string, ClientStatistic> statistics)
-        {
-            // todo: make it configurable
-            // cleanup old statistics (we will not take care for clients that are slower than 1 request per 30 sec.)
-            foreach (var statistic in statistics.Where(x => x.Value.LastRequest < DateTime.UtcNow.AddSeconds(-30)).ToArray())
-            {
-                ClientStatistic value;
-                statistics.TryRemove(statistic.Key, out value);
-            }
-
-            var sessionStats = statistics.GetOrAdd(sessionId, new ClientStatistic());
-            sessionStats.IncreaseRequestCount();
-            if (sessionStats.RequestsPerSecond > this.RequestsPerSecondAndClient)
-            {
-                throw new HttpException(403, "Request denied for this client.");
-            }
-        }
-
-        public int RequestsPerSecondAndClient { get; set; }
-    }
-
-    internal class ClientStatistic
-    {
-        private int requestCount;
-
-        public ClientStatistic()
-        {
-            this.LastRequest = DateTime.UtcNow;
-        }
-
-        public void IncreaseRequestCount()
-        {
-            if (this.requestCount > 1 && this.LastRequest < DateTime.UtcNow.AddSeconds(10))
-            {
-                this.requestCount = this.requestCount / 2;
-            }
-
-            this.LastRequest = DateTime.UtcNow;
-            this.requestCount++;
-        }
-
-        public DateTime LastRequest { get; set; }
-
-        public int RequestsPerSecond
-        {
-            get
-            {
-                return this.requestCount;
-            }
         }
     }
 }

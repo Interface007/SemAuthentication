@@ -29,7 +29,6 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
         /// The about page.
         /// </summary>
         /// <returns>The action to show the associated view.</returns>
-        [FastRequestsProtection(RequestsPerSecondAndClient = 2)]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
