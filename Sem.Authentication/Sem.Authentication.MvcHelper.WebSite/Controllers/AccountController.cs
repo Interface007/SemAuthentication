@@ -17,6 +17,7 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
     using Microsoft.AspNet.Identity.EntityFramework;
     using Microsoft.Owin.Security;
 
+    using Sem.Authentication.MvcHelper.InAppIps;
     using Sem.Authentication.MvcHelper.WebSite.Models;
 
     [Authorize]

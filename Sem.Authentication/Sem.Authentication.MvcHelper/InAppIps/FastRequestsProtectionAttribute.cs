@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper
+namespace Sem.Authentication.MvcHelper.InAppIps
 {
     using System;
     using System.Collections.Concurrent;

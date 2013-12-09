@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper
+namespace Sem.Authentication.MvcHelper.AppInfrastructure
 {
     using System.Xml.Serialization;
 

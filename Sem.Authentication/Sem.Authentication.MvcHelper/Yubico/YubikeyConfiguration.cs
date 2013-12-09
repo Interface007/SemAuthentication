@@ -27,8 +27,8 @@ namespace Sem.Authentication.MvcHelper.Yubico
         public ServerConfiguration Server { get; set; }
 
         /// <summary>
-        /// Gets or sets the user mappings. Here you need to map the ASP.Net user name to an external Yubikey-ID (the first 12 
-        /// characters from a standard Yubikey token). Access will be granted only if this external ID has been mapped to the 
+        /// Gets or sets the user mappings. Here you need to map the ASP.Net user name to an external YUBIKEY-ID (the first 12 
+        /// characters from a standard YUBIKEY token). Access will be granted only if this external ID has been mapped to the 
         /// current user. 
         /// </summary>
         [XmlArrayItem("User")]

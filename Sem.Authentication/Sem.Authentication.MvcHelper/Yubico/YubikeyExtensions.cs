@@ -18,7 +18,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
     public static class YubikeyExtensions
     {
         /// <summary>
-        /// The yubikey input box markup.
+        /// The YUBIKEY input box markup.
         /// </summary>
         private const string YubikeyInputBox = "<input class=\"yubikeyInput\" id=\"yubiKey\" name=\"yubiKey\" text=\"\"/>";
 
