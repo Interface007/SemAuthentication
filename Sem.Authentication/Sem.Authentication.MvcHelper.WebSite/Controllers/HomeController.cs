@@ -11,6 +11,8 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
 {
     using System.Web.Mvc;
 
+    using Sem.Authentication.MvcHelper.Yubico;
+
     /// <summary>
     /// The home controller.
     /// </summary>

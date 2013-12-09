@@ -7,12 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper
+namespace Sem.Authentication.MvcHelper.Yubico
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Web;
     using System.Xml.Serialization;
+
+    using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     /// <summary>
     /// The YUBIKEY configuration.

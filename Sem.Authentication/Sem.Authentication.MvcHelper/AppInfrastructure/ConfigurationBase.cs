@@ -7,11 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper
+namespace Sem.Authentication.MvcHelper.AppInfrastructure
 {
     using System;
     using System.Xml.Serialization;
 
+    /// <summary>
+    /// The configuration base class for authenticators.
+    /// </summary>
     public class ConfigurationBase
     {
         /// <summary>
@@ -20,6 +23,9 @@ namespace Sem.Authentication.MvcHelper
         [XmlIgnore]
         public Exception Exception { get; set; }
 
+        /// <summary>
+        /// Gets or sets the logger to write logging information.
+        /// </summary>
         public LoggerConfiguration Logger { get; set; }
 
         /// <summary>

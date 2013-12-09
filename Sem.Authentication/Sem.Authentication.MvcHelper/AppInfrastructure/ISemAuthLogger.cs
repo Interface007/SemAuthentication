@@ -7,12 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper
+namespace Sem.Authentication.MvcHelper.AppInfrastructure
 {
     using System;
 
+    /// <summary>
+    /// The logging interface you should implement to mal logging calls to your preferred logging library.
+    /// </summary>
     public interface ISemAuthLogger
     {
+        /// <summary>
+        /// Los the the exception <paramref name="exception"/>.
+        /// </summary>
+        /// <param name="exception"> The exception to be logged. </param>
         void Log(Exception exception);
     }
 }

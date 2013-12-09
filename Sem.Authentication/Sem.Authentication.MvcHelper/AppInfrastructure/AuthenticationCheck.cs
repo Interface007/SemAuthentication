@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper
+namespace Sem.Authentication.MvcHelper.AppInfrastructure
 {
     using System;
     using System.Web.Mvc;
@@ -114,6 +114,10 @@ namespace Sem.Authentication.MvcHelper
         /// <param name="filterContext"> The filter context. </param>
         protected abstract void InternalAuthenticationCheck(ActionExecutingContext filterContext);
 
+        /// <summary>
+        /// Creates a logger and logs the exception <paramref name="ex"/>.
+        /// </summary>
+        /// <param name="ex"> The exception to be logged. </param>
         private void Log(Exception ex)
         {
             var logger = this.Logger ?? this.CreateLogger();
@@ -123,6 +127,10 @@ namespace Sem.Authentication.MvcHelper
             }
         }
 
+        /// <summary>
+        /// Creates a logger instance according to the type configured in the file <c>YubiKey.xml</c>.
+        /// </summary>
+        /// <returns> The <see cref="ISemAuthLogger"/> implementation. </returns>
         private ISemAuthLogger CreateLogger()
         {
             if (string.IsNullOrEmpty(this.configuration.Logger.TypeName))
