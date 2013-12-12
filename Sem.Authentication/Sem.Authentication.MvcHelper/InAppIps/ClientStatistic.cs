@@ -39,7 +39,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         /// </summary>
         public void IncreaseRequestCount()
         {
-            if (this.RequestsPerSecond > 1 && this.LastRequest < DateTime.UtcNow.AddSeconds(10))
+            if (this.RequestsPerSecond > 1 && this.LastRequest < DateTime.UtcNow.AddSeconds(-10))
             {
                 this.RequestsPerSecond = this.RequestsPerSecond / 2;
             }

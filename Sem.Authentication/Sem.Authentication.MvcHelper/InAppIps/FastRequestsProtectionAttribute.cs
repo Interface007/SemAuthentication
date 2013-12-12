@@ -11,6 +11,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
@@ -91,9 +92,10 @@ namespace Sem.Authentication.MvcHelper.InAppIps
                 statistics.TryRemove(statistic.Key, out value);
             }
 
-            var sessionStats = statistics.GetOrAdd(clientId, new ClientStatistic());
-            sessionStats.IncreaseRequestCount();
-            if (sessionStats.RequestsPerSecond > this.RequestsPerSecondAndClient)
+            var clientStatistic = statistics.GetOrAdd(clientId, new ClientStatistic());
+            clientStatistic.IncreaseRequestCount();
+            Debug.Print("Client ID: {0}, Request Count: {1}", clientId, clientStatistic.RequestsPerSecond);
+            if (clientStatistic.RequestsPerSecond > this.RequestsPerSecondAndClient)
             {
                 throw new HttpException(403, "Request denied for this client.");
             }
