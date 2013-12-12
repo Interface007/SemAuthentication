@@ -42,9 +42,15 @@ namespace Sem.Authentication.MvcHelper.Test
             }
         }
 
+        /// <summary>
+        /// Tests for implementing the assumed interfaces.
+        /// </summary>
         [TestClass]
         public class Interfaces
         {
+            /// <summary>
+            /// The class should inherit from <see cref="ActionFilterAttribute"/>.
+            /// </summary>
             [TestMethod]
             public void ImplementsActionFilterAttribute()
             {
@@ -53,9 +59,15 @@ namespace Sem.Authentication.MvcHelper.Test
             }
         }
 
+        /// <summary>
+        /// Tests the method <see cref="FastRequestsProtectionAttribute.OnActionExecuting"/>.
+        /// </summary>
         [TestClass]
         public class OnActionExecuting
         {
+            /// <summary>
+            /// Tests whether the attribute blocks the configured fast calls by throwing exceptions.
+            /// </summary>
             [TestMethod]
             [ExpectedException(typeof(HttpException))]
             public void BlocksConfiguredFastCalls()
@@ -71,9 +83,34 @@ namespace Sem.Authentication.MvcHelper.Test
                 // we want to allow max 2 requests in one second
                 var target = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2 };
                 
+                // calling 3 times should throw an exception
                 target.OnActionExecuting(new ActionExecutingContext { RequestContext = rcontext.Object });
                 target.OnActionExecuting(new ActionExecutingContext { RequestContext = rcontext.Object });
                 target.OnActionExecuting(new ActionExecutingContext { RequestContext = rcontext.Object });
+            }
+
+            /// <summary>
+            /// Tests whether the attribute blocks the configured fast calls by throwing exceptions.
+            /// </summary>
+            [TestMethod]
+            public void NotBlocksLessThanConfiguredFastCalls()
+            {
+                // we setup a request context that returns always the same session id
+                var session = new Mock<HttpSessionStateBase>();
+                session.Setup(x => x.SessionID).Returns("hello");
+                var hcontext = new Moq.Mock<HttpContextBase>();
+                hcontext.Setup(x => x.Session).Returns(session.Object);
+                var rcontext = new Moq.Mock<RequestContext>();
+                rcontext.Setup(x => x.HttpContext).Returns(hcontext.Object);
+
+                // we want to allow max 2 requests in one second
+                var target = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2 };
+                
+                // calling 2 times should NOT throw an exception
+                target.OnActionExecuting(new ActionExecutingContext { RequestContext = rcontext.Object });
+                target.OnActionExecuting(new ActionExecutingContext { RequestContext = rcontext.Object });
+
+                Assert.IsNotNull(target);
             }
         }
     }
