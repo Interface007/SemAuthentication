@@ -15,13 +15,16 @@ namespace Sem.Authentication.MvcHelper.InAppIps
     /// <summary>
     /// The statistic about requests done by a single client.
     /// </summary>
-    internal class ClientStatistic
+    public class ClientStatistic
     {
         /// <summary>
         /// The number of requests since the creation of the statistic.
         /// </summary>
         private int requests;
 
+        /// <summary>
+        /// The object ID - just a unique ID for this object instance.
+        /// </summary>
         private string id;
 
         /// <summary>
@@ -56,6 +59,10 @@ namespace Sem.Authentication.MvcHelper.InAppIps
             }
         }
 
+        /// <summary>
+        /// Gets the id of this object instance.
+        /// It's a heisenberg-id ... it will be generated the first time you try to access it ;-).
+        /// </summary>
         public string Id
         {
             get
