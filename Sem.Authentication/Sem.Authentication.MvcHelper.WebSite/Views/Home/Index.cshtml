@@ -1,4 +1,5 @@
 ﻿@using Sem.Authentication.MvcHelper.Yubico
+
 @{
     ViewBag.Title = "Home Page";
 }
@@ -13,6 +14,11 @@
         <h2>CodePlex</h2>
         <p>The home of Sem.Authentication.MvcHelper is on CodePlex.</p>
         <p><a class="btn btn-default" href="https://semauthentication.codeplex.com/">CodePlex &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Fast Request Protector</h2>
+        <p>Try requesting thid´s page faster than one request per second.</p>
+        <p><a class="btn btn-default" href="@Url.Action("OnlyOneRequestPerSecond")">Only one Request per Second &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Yubico Authentication</h2>

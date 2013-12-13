@@ -9,8 +9,10 @@
 
 namespace Sem.Authentication.MvcHelper.WebSite.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
+    using Sem.Authentication.MvcHelper.InAppIps;
     using Sem.Authentication.MvcHelper.Yubico;
 
     /// <summary>
@@ -33,7 +35,7 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
         /// <returns>The action to show the associated view.</returns>
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Sample Application.";
             return this.View();
         }
 
@@ -54,6 +56,7 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
         [YubikeyCheck(SkipIdentityNameCheck = true, InvalidKeyAction = "InvalidKey")]
         public ActionResult YubikeyProtected()
         {
+            ViewBag.Message = "Authentication succeeded!";
             return this.View();
         }
 
@@ -63,7 +66,31 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
         /// <returns>The action to show the associated view.</returns>
         public ActionResult InvalidKey()
         {
+            ViewBag.Message = "InvalidKey!";
             return this.View();
+        }
+
+        /// <summary>
+        /// The "only one request per second" page that will redirect to the action <see cref="Fault"/>
+        /// as soon as a user does request more than 1 action calls per second.
+        /// <see cref="FastRequestsProtectionAttribute"/> for more information about this protection.
+        /// </summary>
+        /// <returns> The <see cref="ActionResult"/>. </returns>
+        [FastRequestsProtection(RequestsPerSecondAndClient = 1, FaultAction = "Fault")]
+        public ActionResult OnlyOneRequestPerSecond()
+        {
+            ViewBag.Message = "Authentication succeeded!";
+            return this.View(new Tuple<string>(string.Empty));
+        }
+
+        /// <summary>
+        /// The fault handling action. The parameters are all optional.
+        /// </summary>
+        /// <param name="faultSource"> The fault source. </param>
+        /// <returns> The <see cref="ActionResult"/>. </returns>
+        public ActionResult Fault(string faultSource = "")
+        {
+            return this.View(new Tuple<string>(faultSource));
         }
     }
 }

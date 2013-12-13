@@ -1,0 +1,13 @@
+﻿@model Tuple<string>
+
+@{
+    ViewBag.Title = "FAULT!";
+}
+
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>This page has been loaded because of this fault-source: @Model.Item1</p>
+<p>Time: @DateTime.Now</p>
+
+<a class="btn btn-default" href="@Url.Action("Index")">Back &laquo;</a>

@@ -57,9 +57,13 @@
     <Compile Include="Exceptions\YubikeyInvalidResponseException.cs" />
     <Compile Include="Exceptions\YubikeyNotPresentException.cs" />
     <Compile Include="Exceptions\YubikeyNullResponseException.cs" />
+    <Compile Include="InAppIps\ContextProcessor.cs" />
     <Compile Include="InAppIps\FastRequestsProtectionAttribute.cs" />
     <Compile Include="AppInfrastructure\ISemAuthLogger.cs" />
     <Compile Include="AppInfrastructure\LoggerConfiguration.cs" />
+    <Compile Include="InAppIps\IIdExtractor.cs" />
+    <Compile Include="InAppIps\SessionIdExtractor.cs" />
+    <Compile Include="InAppIps\UserHostExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AppInfrastructure\ServerConfiguration.cs" />
     <Compile Include="AppInfrastructure\UserMapping.cs" />

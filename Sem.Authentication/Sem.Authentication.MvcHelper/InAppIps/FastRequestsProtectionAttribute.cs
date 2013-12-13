@@ -11,6 +11,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Web;
@@ -22,32 +23,47 @@ namespace Sem.Authentication.MvcHelper.InAppIps
     public class FastRequestsProtectionAttribute : ActionFilterAttribute
     {
         /// <summary>
-        /// The session statistics.
+        /// The context processors that do host the id extractors and the client statistic.
         /// </summary>
-        private readonly ConcurrentDictionary<string, ClientStatistic> sessionStatistics = new ConcurrentDictionary<string, ClientStatistic>();
-
-        /// <summary>
-        /// The user host statistics.
-        /// </summary>
-        private readonly ConcurrentDictionary<string, ClientStatistic> userHostStatistics = new ConcurrentDictionary<string, ClientStatistic>();
-
-        /// <summary>
-        /// The max retention time of statistics - when a client does not issue requests in this period of time, we will remove the statistic.
-        /// </summary>
-        private readonly int maxRetentionTimeOfStatistics;
+        private readonly IEnumerable<ContextProcessor> contextProcessors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastRequestsProtectionAttribute"/> class.
         /// </summary>
         public FastRequestsProtectionAttribute()
+            : this(typeof(SessionIdExtractor), typeof(UserHostExtractor))
         {
-            this.maxRetentionTimeOfStatistics = 30;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FastRequestsProtectionAttribute"/> class.
+        /// </summary>
+        /// <param name="extractors">The types of extractors to use.</param>
+        public FastRequestsProtectionAttribute(params Type[] extractors)
+        {
+            this.MaxRetentionTimeOfStatistics = 3000;
+            this.contextProcessors = 
+                extractors
+                    .Select(x => x.GetConstructor(new Type[] { }))
+                    .Where(x => x != null)
+                    .Select(x => new ContextProcessor((IIdExtractor)x.Invoke(null)));
+        }
+
+        /// <summary>
+        /// Gets or sets the maximum retention time in milliseconds of statistics - when a client does not issue requests in this period of time, we will remove the statistic.
+        /// </summary>
+        public int MaxRetentionTimeOfStatistics { get; set; }
 
         /// <summary>
         /// Gets or sets the requests per second the client is allowed to do.
         /// </summary>
         public int RequestsPerSecondAndClient { get; set; }
+
+        /// <summary>
+        /// Gets or sets the action to redirect to in case of a fault. 
+        /// The action does contain a string parameter <c>FaultSource</c> with the name of this class.
+        /// </summary>
+        public string FaultAction { get; set; }
 
         /// <summary>
         /// Called by the ASP.NET MVC framework before the action method executes.
@@ -60,16 +76,16 @@ namespace Sem.Authentication.MvcHelper.InAppIps
             var context = filterContext.RequestContext.HttpContext;
             if (context != null)
             {
-                var session = context.Session;
-                if (session != null)
+                if (this.contextProcessors.Any(processor => !this.StatisticsGate(processor.IdExtractor.Extract(context), processor.Statistics)))
                 {
-                    this.StatisticsGate(session.SessionID, this.sessionStatistics);
-                }
+                    if (string.IsNullOrEmpty(this.FaultAction))
+                    {
+                        throw new HttpException(403, "Request denied for this client.");
+                    }
 
-                var request = context.Request;
-                if (request != null)
-                {
-                    this.StatisticsGate(request.UserHostAddress, this.userHostStatistics);
+                    var controller = (System.Web.Mvc.Controller)filterContext.Controller;
+                    var action = controller.Url.Action(this.FaultAction, new { FaultSource = this.GetType().Name });
+                    filterContext.Result = new RedirectResult(action);
                 }
             }
 
@@ -80,13 +96,20 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         /// The statistics gate does check the clients statistics and prohibits further processing of the request if the client
         /// requests this resource too often.
         /// </summary>
-        /// <param name="clientId"> The client ID may be a session id or a client IP. </param>
-        /// <param name="statistics"> The statistics collection that match the type of the client id. </param>
-        private void StatisticsGate(string clientId, ConcurrentDictionary<string, ClientStatistic> statistics)
+        /// <param name="clientId"> The client ID may be a session id or a client IP.  </param>
+        /// <param name="statistics"> The statistics collection that match the type of the client id.  </param>
+        /// <returns> A value indicating whether the client is allowed to go on. </returns>
+        private bool StatisticsGate(string clientId, ConcurrentDictionary<string, ClientStatistic> statistics)
         {
-            // todo: make it configurable
-            // cleanup old statistics (we will not take care for clients that are slower than 1 request per 30 sec.)
-            foreach (var statistic in statistics.Where(x => x.Value.LastRequest < DateTime.UtcNow.AddSeconds(-this.maxRetentionTimeOfStatistics)).ToArray())
+            // no client id - nothing to do...
+            if (string.IsNullOrEmpty(clientId))
+            {
+                return true;
+            }
+
+            // cleanup old statistics (we will not take care for clients that are slower than 1 request per X millisec.)
+            var time = DateTime.UtcNow.AddMilliseconds(-this.MaxRetentionTimeOfStatistics);
+            foreach (var statistic in statistics.Where(x => x.Value.LastRequest < time).ToArray())
             {
                 ClientStatistic value;
                 statistics.TryRemove(statistic.Key, out value);
@@ -94,11 +117,10 @@ namespace Sem.Authentication.MvcHelper.InAppIps
 
             var clientStatistic = statistics.GetOrAdd(clientId, new ClientStatistic());
             clientStatistic.IncreaseRequestCount();
-            Debug.Print("Client ID: {0}, Request Count: {1}", clientId, clientStatistic.RequestsPerSecond);
-            if (clientStatistic.RequestsPerSecond > this.RequestsPerSecondAndClient)
-            {
-                throw new HttpException(403, "Request denied for this client.");
-            }
+
+            var requestsPerSecond = clientStatistic.RequestsPerSecond;
+            Debug.Print("client statistic for ID {0}: {1} requests per second ({2}|{3}) {4}", clientId, requestsPerSecond, clientStatistic.FirstRequest, clientStatistic.LastRequest, clientStatistic.Id);
+            return requestsPerSecond <= this.RequestsPerSecondAndClient;
         }
     }
 }

@@ -1,0 +1,8 @@
+﻿@model Tuple<string>
+
+@{
+    ViewBag.Title = "One Request per Second";
+}
+
+<p>This page can only be requested one times per second. Try reloading it 2 times per second.</p>
+<p>Time: @DateTime.Now</p>

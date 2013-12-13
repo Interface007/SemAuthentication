@@ -216,6 +216,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\YubikeyProtected.cshtml" />
     <Content Include="Views\Home\InvalidKey.cshtml" />
+    <Content Include="Views\Home\OnlyOneRequestPerSecond.cshtml" />
+    <Content Include="Views\Home\Fault.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
