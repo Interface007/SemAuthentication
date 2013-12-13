@@ -79,7 +79,7 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
         [FastRequestsProtection(RequestsPerSecondAndClient = 1, FaultAction = "Fault")]
         public ActionResult OnlyOneRequestPerSecond()
         {
-            ViewBag.Message = "Authentication succeeded!";
+            ViewBag.Message = "One Request per Second Only!";
             return this.View(new Tuple<string>(string.Empty));
         }
 
