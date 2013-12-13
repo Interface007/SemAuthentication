@@ -72,7 +72,7 @@
     <Compile Include="Yubico\YubikeyExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Content\yubikey-finger.png" />
+    <EmbeddedResource Include="Yubico\Content\yubikey-finger.png" />
     <CodeAnalysisDictionary Include="Properties\CustomDictionary.xml" />
     <Content Include="Yubico\YubiKey.xml" />
   </ItemGroup>
