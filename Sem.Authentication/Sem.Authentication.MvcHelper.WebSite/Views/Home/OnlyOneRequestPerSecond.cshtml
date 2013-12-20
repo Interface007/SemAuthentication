@@ -4,5 +4,8 @@
     ViewBag.Title = "One Request per Second";
 }
 
-<p>This page can only be requested one times per second. Try reloading it 2 times per second.</p>
+<p>This page can only be requested one times per second. Try reloading it 2 times per second by hitting F5 multiple times.</p>
+<p>You might be able to reload the page more than two times in one single second, because the request counter will be reset each 3 seconds. This 
+    does mean that you might navigate to this page, then wait 2 seconds and then (because you already are in the 3rd second) can reload the page
+    multiple times, because the 1 request per second effectively means: <br/> "1 * [Retention Time for Statistics] + 1" </p>
 <p>Time: @DateTime.Now</p>

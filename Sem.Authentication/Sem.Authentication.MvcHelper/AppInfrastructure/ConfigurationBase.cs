@@ -27,16 +27,5 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// Gets or sets the logger to write logging information.
         /// </summary>
         public LoggerConfiguration Logger { get; set; }
-
-        /// <summary>
-        /// Checks the <see cref="Exception"/> property for deserialization issues and throws an exception if it's not NULL.
-        /// </summary>
-        public void EnsureCorrectConfiguration()
-        {
-            if (this.Exception != null)
-            {
-                throw this.Exception;
-            }
-        }
     }
 }

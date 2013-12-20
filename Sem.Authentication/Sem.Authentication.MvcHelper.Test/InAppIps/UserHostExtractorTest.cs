@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.Test
+namespace Sem.Authentication.MvcHelper.Test.InAppIps
 {
     using System.Web;
 

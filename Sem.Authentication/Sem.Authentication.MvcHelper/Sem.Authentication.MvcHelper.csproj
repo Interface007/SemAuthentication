@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInfrastructure\AuthenticationCheck.cs" />
+    <Compile Include="AppInfrastructure\Extensions.cs" />
     <Compile Include="AppInfrastructure\ISemAudit.cs" />
     <Compile Include="InAppIps\ClientStatistic.cs" />
     <Compile Include="AppInfrastructure\ConfigurationBase.cs" />

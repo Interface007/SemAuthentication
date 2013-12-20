@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RouteConfig.cs" company="Sven Erik Matzen">
+//   (c) 2013 Sven Erik Matzen
+// </copyright>
+// <summary>
+//   Defines the RouteConfig type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Sem.Authentication.MvcHelper.WebSite
 {
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
@@ -16,8 +21,7 @@ namespace Sem.Authentication.MvcHelper.WebSite
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional });
         }
     }
 }

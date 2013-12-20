@@ -70,6 +70,11 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         {
             try
             {
+                if (filterContext == null || filterContext.HttpContext == null || filterContext.HttpContext.Request == null)
+                {
+                    throw new ArgumentNullException("filterContext", "the parameter must contain a full initialized context object includeing the property path filterContext.HttpContext.Request.");
+                }
+
                 var url = filterContext.HttpContext.Request.Url;
                 if (url != null && url.Query.Contains("42FE943EC8A64735A978D1F81D5FFD00"))
                 {
@@ -95,7 +100,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
                 this.Log(ex);
 
                 // if we don't know where to redirect to, we simply re-throw the exception
-                if (string.IsNullOrEmpty(this.InvalidKeyAction))
+                if (string.IsNullOrEmpty(this.InvalidKeyAction) || filterContext == null)
                 {
                     throw;
                 }
@@ -133,7 +138,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// <returns> The <see cref="ISemAuthLogger"/> implementation. </returns>
         private ISemAuthLogger CreateLogger()
         {
-            if (string.IsNullOrEmpty(this.configuration.Logger.TypeName))
+            if (this.configuration == null || this.configuration.Logger == null || string.IsNullOrEmpty(this.configuration.Logger.TypeName))
             {
                 return null;
             }

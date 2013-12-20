@@ -12,6 +12,8 @@ namespace Sem.Authentication.MvcHelper.Yubico
     using System.Web;
     using System.Web.Mvc;
 
+    using Sem.Authentication.MvcHelper.AppInfrastructure;
+
     /// <summary>
     /// HTML helper extensions for YUBIKEY-functionality.
     /// </summary>

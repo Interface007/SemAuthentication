@@ -55,11 +55,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ClientStatisticTest.cs" />
-    <Compile Include="FastRequestsProtectionAttributeTest.cs" />
+    <Compile Include="InAppIps\ClientStatisticTest.cs" />
+    <Compile Include="InAppIps\FastRequestsProtectionAttributeTest.cs" />
+    <Compile Include="MvcTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionIdExtractorTest.cs" />
-    <Compile Include="UserHostExtractorTest.cs" />
+    <Compile Include="InAppIps\SessionIdExtractorTest.cs" />
+    <Compile Include="InAppIps\UserHostExtractorTest.cs" />
+    <Compile Include="YubikeyCheckClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sem.Authentication.MvcHelper\Sem.Authentication.MvcHelper.csproj">
