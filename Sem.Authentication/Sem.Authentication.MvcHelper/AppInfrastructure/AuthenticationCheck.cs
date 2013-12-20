@@ -70,6 +70,8 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         {
             try
             {
+                // filterContext.HttpContext is probelmatic to test, because instead of simply letting it NULL, the
+                // filter context does create an internal class instance that cannot be easily tested for from outside
                 if (filterContext == null || filterContext.HttpContext == null || filterContext.HttpContext.Request == null)
                 {
                     throw new ArgumentNullException("filterContext", "the parameter must contain a full initialized context object includeing the property path filterContext.HttpContext.Request.");
@@ -123,7 +125,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// Creates a logger and logs the exception <paramref name="ex"/>.
         /// </summary>
         /// <param name="ex"> The exception to be logged. </param>
-        private void Log(Exception ex)
+        protected void Log(Exception ex)
         {
             var logger = this.Logger ?? this.CreateLogger();
             if (logger != null)

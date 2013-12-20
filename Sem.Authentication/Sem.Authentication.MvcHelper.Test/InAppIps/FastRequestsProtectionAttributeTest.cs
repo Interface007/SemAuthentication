@@ -10,6 +10,7 @@
 namespace Sem.Authentication.MvcHelper.Test.InAppIps
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
@@ -90,6 +91,7 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             /// </summary>
             [TestMethod]
             [ExpectedException(typeof(HttpException))]
+            [ExcludeFromCodeCoverage]   // since we expect an exception, we cannot get 100% code coverage
             public void BlocksConfiguredFastCalls()
             {
                 // we setup a request context that returns always the same session id
@@ -132,6 +134,7 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             /// </summary>
             [TestMethod]
             [ExpectedException(typeof(HttpException))]
+            [ExcludeFromCodeCoverage]   // since we expect an exception, we cannot get 100% code coverage
             public void BlocksConfiguredFastCallsOnTwoInstances()
             {
                 // we setup a request context that returns always the same session id

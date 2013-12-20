@@ -2,6 +2,7 @@ namespace Sem.Authentication.MvcHelper.Test
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -75,7 +76,7 @@ namespace Sem.Authentication.MvcHelper.Test
                                                   DataTokens = new RouteValueDictionary()
                                               }
                                       };
-                
+
             controller.Object.Url = new UrlHelper(requestContext.Object, routeCollection);
 
             return new ActionExecutingContext
@@ -92,8 +93,7 @@ namespace Sem.Authentication.MvcHelper.Test
         /// <returns> The <see cref="RouteValueDictionary"/>. </returns>
         private static RouteValueDictionary CreateRouteValueDictionary(object values)
         {
-            var dictionary = values as IDictionary<string, object>;
-            return dictionary != null ? new RouteValueDictionary(dictionary) : new RouteValueDictionary(values);
+            return new RouteValueDictionary(values);
         }
     }
 }

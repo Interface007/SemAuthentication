@@ -1,6 +1,7 @@
 ﻿namespace Sem.Authentication.MvcHelper.Test
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,6 +15,7 @@
         {
             [TestMethod]
             [ExpectedException(typeof(ArgumentNullException))]
+            [ExcludeFromCodeCoverage]
             public void NullConfigurationThrowsWhenInstance()
             {
                 var target = new YubikeyCheck(null) { ImageOnly = true };

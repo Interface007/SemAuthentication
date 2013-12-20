@@ -55,6 +55,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AppInfrastructure\AuthenticationCheckTest.cs" />
+    <Compile Include="AppInfrastructure\ExtensionsTest.cs" />
+    <Compile Include="AppInfrastructure\SampleAuthenticator.cs" />
     <Compile Include="InAppIps\ClientStatisticTest.cs" />
     <Compile Include="InAppIps\FastRequestsProtectionAttributeTest.cs" />
     <Compile Include="MvcTestBase.cs" />
