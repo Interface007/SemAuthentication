@@ -7,9 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.Exceptions
+namespace Sem.Authentication.MvcHelper.Yubico.Exceptions
 {
     using System;
+
+    using Sem.Authentication.MvcHelper.Exceptions;
 
     using YubicoDotNetClient;
 

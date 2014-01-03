@@ -33,7 +33,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
@@ -43,39 +46,30 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="YubicoDotNetClient">
-      <HintPath>..\packages\YubicoDotNetClient.1.0.0.0\lib\net40\YubicoDotNetClient.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInfrastructure\AuthenticationCheck.cs" />
     <Compile Include="AppInfrastructure\Extensions.cs" />
     <Compile Include="AppInfrastructure\ISemAudit.cs" />
-    <Compile Include="InAppIps\ClientStatistic.cs" />
+    <Compile Include="InAppIps\BaseGateAttribute.cs" />
+    <Compile Include="InAppIps\Processing\ClientStatistic.cs" />
     <Compile Include="AppInfrastructure\ConfigurationBase.cs" />
     <Compile Include="AppInfrastructure\DebugLogger.cs" />
     <Compile Include="Exceptions\AuthenticationFilterException.cs" />
-    <Compile Include="Exceptions\YubikeyInvalidResponseException.cs" />
-    <Compile Include="Exceptions\YubikeyNotPresentException.cs" />
-    <Compile Include="Exceptions\YubikeyNullResponseException.cs" />
-    <Compile Include="InAppIps\ContextProcessor.cs" />
+    <Compile Include="InAppIps\Processing\ContextProcessor.cs" />
     <Compile Include="InAppIps\FastRequestsProtectionAttribute.cs" />
     <Compile Include="AppInfrastructure\ISemAuthLogger.cs" />
     <Compile Include="AppInfrastructure\LoggerConfiguration.cs" />
-    <Compile Include="InAppIps\IIdExtractor.cs" />
-    <Compile Include="InAppIps\SessionIdExtractor.cs" />
-    <Compile Include="InAppIps\UserHostExtractor.cs" />
+    <Compile Include="InAppIps\Processing\IIdExtractor.cs" />
+    <Compile Include="InAppIps\MinimumRequestTimeDistanceAttribute.cs" />
+    <Compile Include="InAppIps\Processing\SessionIdExtractor.cs" />
+    <Compile Include="InAppIps\Processing\UserHostExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AppInfrastructure\ServerConfiguration.cs" />
     <Compile Include="AppInfrastructure\UserMapping.cs" />
-    <Compile Include="Yubico\YubikeyCheck.cs" />
-    <Compile Include="Yubico\YubikeyConfiguration.cs" />
-    <Compile Include="Yubico\YubikeyExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Yubico\Content\yubikey-finger.png" />
     <CodeAnalysisDictionary Include="Properties\CustomDictionary.xml" />
-    <Content Include="Yubico\YubiKey.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuGet\Sem.Authentication.MvcHelper.1.0.0.nupkg" />

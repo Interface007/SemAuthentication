@@ -84,6 +84,19 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
         }
 
         /// <summary>
+        /// The "min one second per request" page that will redirect to the action <see cref="Fault"/>
+        /// as soon as a user does request more than 1 action calls per second.
+        /// <see cref="FastRequestsProtectionAttribute"/> for more information about this protection.
+        /// </summary>
+        /// <returns> The <see cref="ActionResult"/>. </returns>
+        [MinimumRequestTimeDistanceAttribute(Seconds = 1, Message = "Fault")]
+        public ActionResult MinOneSecBetweenRequests()
+        {
+            ViewBag.Message = "One Request per Second Only!";
+            return this.View(new Tuple<string>(string.Empty));
+        }
+
+        /// <summary>
         /// The fault handling action. The parameters are all optional.
         /// </summary>
         /// <param name="faultSource"> The fault source. </param>

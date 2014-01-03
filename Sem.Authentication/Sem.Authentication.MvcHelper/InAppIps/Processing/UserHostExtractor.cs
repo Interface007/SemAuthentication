@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.InAppIps
+namespace Sem.Authentication.MvcHelper.InAppIps.Processing
 {
     using System.Web;
 
@@ -23,7 +23,16 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         /// <returns> The <see cref="string"/> representing the "unique" id of the client. </returns>
         public string Extract(HttpContextBase context)
         {
-            return context.Request == null ? string.Empty : context.Request.UserHostAddress;
+            var request = context.Request;
+            return request != null && request.Headers != null ? request.UserHostAddress + request.Headers["REMOTE_ADDR"] + GetFirstPart(request.Headers["HTTP_X_FORWARDED_FOR"]) :
+                   request != null ? request.UserHostAddress 
+                                   : string.Empty;
+        }
+
+        private static string GetFirstPart(string value)
+        {
+            value = value ?? string.Empty;
+            return value.Contains(",") ? value.Substring(0, value.IndexOf(',')) : value;
         }
     }
 }

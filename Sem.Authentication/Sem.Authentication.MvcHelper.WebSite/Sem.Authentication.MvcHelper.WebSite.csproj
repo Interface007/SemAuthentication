@@ -218,6 +218,7 @@
     <Content Include="Views\Home\InvalidKey.cshtml" />
     <Content Include="Views\Home\OnlyOneRequestPerSecond.cshtml" />
     <Content Include="Views\Home\Fault.cshtml" />
+    <Content Include="Views\Home\MinOneSecBetweenRequests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -230,6 +231,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sem.Authentication.MvcHelper.Yubico\Sem.Authentication.MvcHelper.Yubico.csproj">
+      <Project>{C0147F75-A32D-448B-AE10-8A3F1D9446DF}</Project>
+      <Name>Sem.Authentication.MvcHelper.Yubico</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sem.Authentication.MvcHelper\Sem.Authentication.MvcHelper.csproj">
       <Project>{40F49E32-3BC6-442F-A6A8-DE77E44ED30B}</Project>
       <Name>Sem.Authentication.MvcHelper</Name>

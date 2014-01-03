@@ -1,0 +1,11 @@
+﻿@model Tuple<string>
+
+@{
+    ViewBag.Title = "One Second between requests";
+}
+
+<p>This page can only be requested one times per second. Try reloading it 2 times per second by hitting F5 multiple times.</p>
+<p>
+    This page is protected by simply measuring the time between two requests. If it is less than one second, a 409 will be returned.
+</p>
+<p>Time: @DateTime.Now</p>

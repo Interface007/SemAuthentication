@@ -60,8 +60,13 @@
                 target.OnActionExecuting(null);
             }
         
+            /// <summary>
+            /// Because not initializing the http context will result in this property returning an <c>EmptyHttpContext</c> 
+            /// (an internal type, so we cannot easily test for it), we will not get the expected <see cref="ArgumentNullException"/>
+            /// but an <see cref="NotImplementedException"/> thrown by this "dummy context".
+            /// </summary>
             [TestMethod]
-            [ExpectedException(typeof(ArgumentNullException))]
+            [ExpectedException(typeof(NotImplementedException))]
             public void ThrowsIfContextHttpContextIsNull()
             {
                 var target = new SampleAuthenticator(null);

@@ -14,6 +14,7 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.UI;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -90,7 +91,6 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             /// Tests whether the attribute blocks the configured fast calls by throwing exceptions.
             /// </summary>
             [TestMethod]
-            [ExpectedException(typeof(HttpException))]
             [ExcludeFromCodeCoverage]   // since we expect an exception, we cannot get 100% code coverage
             public void BlocksConfiguredFastCalls()
             {
@@ -104,6 +104,10 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 target.OnActionExecuting(context);
                 target.OnActionExecuting(context);
                 target.OnActionExecuting(context);
+
+                var contentResult = context.Result as ContentResult;
+                Assert.IsNotNull(contentResult);
+                Assert.AreEqual("client has been blocked...", contentResult.Content);
             }
 
             /// <summary>
@@ -133,7 +137,6 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             /// even if the requests are being handled by different instances of the attribute.
             /// </summary>
             [TestMethod]
-            [ExpectedException(typeof(HttpException))]
             [ExcludeFromCodeCoverage]   // since we expect an exception, we cannot get 100% code coverage
             public void BlocksConfiguredFastCallsOnTwoInstances()
             {
@@ -148,6 +151,10 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 target1.OnActionExecuting(context);
                 target2.OnActionExecuting(context);
                 target1.OnActionExecuting(context);
+
+                var contentResult = context.Result as ContentResult;
+                Assert.IsNotNull(contentResult);
+                Assert.AreEqual("client has been blocked...", contentResult.Content);
             }
 
             /// <summary>

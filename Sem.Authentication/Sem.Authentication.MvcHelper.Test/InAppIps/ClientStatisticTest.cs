@@ -15,6 +15,7 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.Authentication.MvcHelper.InAppIps;
+    using Sem.Authentication.MvcHelper.InAppIps.Processing;
 
     public static class ClientStatisticTest
     {
