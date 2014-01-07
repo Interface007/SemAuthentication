@@ -7,7 +7,7 @@
 
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
-    public static class ExtensionsTest
+    public static class ClassExtensions
     {
         [TestClass]
         public class EnsureCorrectConfiguration

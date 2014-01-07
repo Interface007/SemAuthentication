@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserHostExtractorTest.cs" company="Sven Erik Matzen">
+// <copyright file="ClassSessionIdExtractor.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the UserHostExtractorTest type.
+//   Defines the SessionIdExtractorTest type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,10 +13,9 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Sem.Authentication.MvcHelper.InAppIps;
     using Sem.Authentication.MvcHelper.InAppIps.Processing;
 
-    public static class UserHostExtractorTest
+    public static class ClassSessionIdExtractor
     {
         [TestClass]
         public class Extract
@@ -24,7 +23,7 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             [TestMethod]
             public void HandelsNull()
             {
-                var target = new UserHostExtractor();
+                var target = new SessionIdExtractor();
                 var httpContext = new Moq.Mock<HttpContextBase>();
                 var result = target.Extract(httpContext.Object);
                 Assert.AreEqual(string.Empty, result);

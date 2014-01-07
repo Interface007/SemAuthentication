@@ -1,14 +1,26 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MvcTestBase.cs" company="Sven Erik Matzen">
+//   (c) 2013 Sven Erik Matzen
+// </copyright>
+// <summary>
+//   Defines the MvcTestBase type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace Sem.Authentication.MvcHelper.Test
 {
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
+    using System.Collections.Specialized;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using Moq;
 
+    /// <summary>
+    /// The test base class for MVC tests. This class does provide some basic helpers for
+    /// testing MVC controllers / filters etc.
+    /// </summary>
     public class MvcTestBase
     {
         /// <summary>
@@ -23,7 +35,7 @@ namespace Sem.Authentication.MvcHelper.Test
         /// <summary>
         /// Creates a new request context that returns a distinct, but always the same, session id.
         /// </summary>
-        /// <param name="requestUrl"></param>
+        /// <param name="requestUrl">The URL that should be simulated to be requested.</param>
         /// <returns> The <see cref="Mock"/> object for the request context.  </returns>
         public static ActionExecutingContext CreateRequestContext(Uri requestUrl)
         {
@@ -39,45 +51,39 @@ namespace Sem.Authentication.MvcHelper.Test
         /// <returns> The <see cref="Mock"/> object for the request context.  </returns>
         public static ActionExecutingContext CreateRequestContext(Uri requestUrl, string sessionId, string clientIP)
         {
-            // we setup a request context that returns always the same session id
-            var sessionState = new Mock<HttpSessionStateBase>();
-            sessionState.Setup(x => x.SessionID).Returns(sessionId);
+            return CreateRequestContext(requestUrl, sessionId, clientIP, new NameValueCollection());
+        }
 
-            var requestBase = new Mock<HttpRequestBase>();
-            requestBase.Setup(x => x.UserHostAddress).Returns(clientIP);
-            requestBase.Setup(x => x.ApplicationPath).Returns("/");
-            requestBase.Setup(x => x.Url).Returns(requestUrl);
+        /// <summary>
+        /// Creates a new request context that returns a distinct, but always the same, session id.
+        /// </summary>
+        /// <param name="requestUrl">The URL the request should fake.</param>
+        /// <param name="sessionId"> The session Id for the request. </param>
+        /// <param name="clientIP"> The client IP for the request. </param>
+        /// <param name="formCollection">The collection of form data items.</param>
+        /// <returns> The <see cref="Mock"/> object for the request context.  </returns>
+        public static ActionExecutingContext CreateRequestContext(Uri requestUrl, string sessionId, string clientIP, NameValueCollection formCollection)
+        {
+            object values = new
+                                {
+                                    controller = "Home",
+                                    action = "Index",
+                                    id = UrlParameter.Optional
+                                };
 
-            var response = new Mock<HttpResponseBase>();
-            response.Setup(r => r.ApplyAppPathModifier(It.IsAny<string>())).Returns((string s) => s);
+            var requestBase = RequestBase(requestUrl, clientIP, formCollection);
+            var httpContext = HttpContext(sessionId, requestBase);
+            var requestContext = RequestContext(httpContext, values);
+            var routes = RouteCollection(values);
 
-            var httpContext = new Moq.Mock<HttpContextBase>();
-            httpContext.Setup(x => x.Session).Returns(sessionState.Object);
-            httpContext.Setup(x => x.Request).Returns(requestBase.Object);
-            httpContext.Setup(x => x.Response).Returns(response.Object);
-
-            var requestContext = new Moq.Mock<RequestContext>();
-            requestContext.Setup(x => x.HttpContext).Returns(httpContext.Object);
-            requestContext.Setup(x => x.RouteData).Returns(new RouteData());
-
+            var urlHelper = new UrlHelper(requestContext.Object, routes);
             var controller = new Mock<Controller>();
-            var routeCollection = new RouteCollection
-                                      {
-                                          new Route("{controller}/{action}/{id}", new MvcRouteHandler())
-                                              {
-                                                  Defaults = CreateRouteValueDictionary(
-                                                  new
-                                                      {
-                                                          controller = "Home", 
-                                                          action = "Index", 
-                                                          id = UrlParameter.Optional
-                                                      }), 
-                                                  Constraints = CreateRouteValueDictionary(null), 
-                                                  DataTokens = new RouteValueDictionary()
-                                              }
-                                      };
-
-            controller.Object.Url = new UrlHelper(requestContext.Object, routeCollection);
+            controller.Object.Url = urlHelper;
+            RouteTable.Routes.Clear();
+            foreach (var route in routes)
+            {
+                RouteTable.Routes.Add(route);                
+            }
 
             return new ActionExecutingContext
                        {
@@ -86,14 +92,86 @@ namespace Sem.Authentication.MvcHelper.Test
                        };
         }
 
-        /// <summary>
-        /// Creates a route value dictionary.
-        /// </summary>
-        /// <param name="values"> The values. </param>
-        /// <returns> The <see cref="RouteValueDictionary"/>. </returns>
-        private static RouteValueDictionary CreateRouteValueDictionary(object values)
+        private static RouteCollection RouteCollection(object values)
         {
-            return new RouteValueDictionary(values);
+            return new RouteCollection
+                             {
+                                 new Route("{controller}/{action}/{id}", new MvcRouteHandler())
+                                     {
+                                         Defaults = new RouteValueDictionary(values),
+                                         Constraints = new RouteValueDictionary((object)null),
+                                         DataTokens = new RouteValueDictionary(),
+                                     }
+                             };
+        }
+
+        private static Mock<HttpContextBase> HttpContext(string sessionId, Mock<HttpRequestBase> requestBase)
+        {
+            var httpContext = new Moq.Mock<HttpContextBase>();
+            httpContext.Setup(x => x.Session).Returns(SessionState(sessionId).Object);
+            httpContext.Setup(x => x.Request).Returns(requestBase.Object);
+            httpContext.Setup(x => x.Response).Returns(Response().Object);
+            return httpContext;
+        }
+
+        private static Mock<HttpResponseBase> Response()
+        {
+            var response = new Mock<HttpResponseBase>();
+            response.Setup(r => r.ApplyAppPathModifier(It.IsAny<string>())).Returns((string s) => s);
+            return response;
+        }
+
+        private static Mock<HttpSessionStateBase> SessionState(string sessionId)
+        {
+            var sessionState = new Mock<HttpSessionStateBase>();
+            sessionState.Setup(x => x.SessionID).Returns(sessionId);
+            return sessionState;
+        }
+
+        private static Mock<HttpRequestBase> RequestBase(Uri requestUrl, string clientIP, NameValueCollection formCollection)
+        {
+            var path = requestUrl == null ? string.Empty : requestUrl.AbsolutePath;
+            var requestBase = new Mock<HttpRequestBase>();
+            requestBase.Setup(x => x.ApplicationPath).Returns(path);
+            requestBase.Setup(x => x.AppRelativeCurrentExecutionFilePath).Returns("~" + path);
+            requestBase.Setup(x => x.CurrentExecutionFilePath).Returns("/");
+            requestBase.Setup(x => x.CurrentExecutionFilePathExtension).Returns(string.Empty);
+            requestBase.Setup(x => x.Form).Returns(formCollection);
+            requestBase.Setup(x => x.HttpMethod).Returns("GET");
+            requestBase.Setup(x => x.Path).Returns("/");
+            requestBase.Setup(x => x.RawUrl).Returns(path);
+            requestBase.Setup(x => x.RequestType).Returns("GET");
+            requestBase.Setup(x => x.Url).Returns(requestUrl);
+            requestBase.Setup(x => x.UserHostAddress).Returns(clientIP);
+            requestBase.Setup(x => x.UserHostName).Returns(clientIP);
+            return requestBase;
+        }
+
+        private static Mock<RequestContext> RequestContext(Mock<HttpContextBase> httpContext, object values)
+        {
+            var requestContext = new Moq.Mock<RequestContext>();
+            requestContext.Setup(x => x.HttpContext).Returns(httpContext.Object);
+            requestContext.Setup(x => x.RouteData).Returns(RouteData(values));
+
+            return requestContext;
+        }
+
+        private static RouteData RouteData(object values)
+        {
+            var routeData = new RouteData
+                                {
+                                    Route =
+                                        new Route("{controller}/{action}/{id}", new MvcRouteHandler())
+                                            {
+                                                Defaults = new RouteValueDictionary(values),
+                                                Constraints = new RouteValueDictionary((object)null),
+                                                DataTokens = new RouteValueDictionary()
+                                            },
+                                };
+
+            routeData.Values.Add("controller", "Home");
+            routeData.Values.Add("action", "Index");
+            return routeData;
         }
     }
 }

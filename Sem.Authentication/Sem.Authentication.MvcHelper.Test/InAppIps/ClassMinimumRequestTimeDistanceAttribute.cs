@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FastRequestsProtectionAttributeTest.cs" company="Sven Erik Matzen">
+// <copyright file="ClassMinimumRequestTimeDistanceAttribute.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the Tests for the FastRequestsProtectionAttribute.
+//   Defines the Tests for the MinimumRequestTimeDistanceAttribute.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,22 +12,20 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.UI;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.Authentication.MvcHelper.InAppIps;
 
     /// <summary>
-    /// Contains tests for all methods of <see cref="FastRequestsProtectionAttribute"/>.
+    /// Contains tests for all methods of <see cref="MinimumRequestTimeDistanceAttribute"/>.
     /// </summary>
     [TestClass]
-    public class FastRequestsProtectionAttributeTest
+    public class ClassMinimumRequestTimeDistanceAttribute
     {
         /// <summary>
-        /// Tests the constructor of <see cref="FastRequestsProtectionAttribute"/>.
+        /// Tests the constructor of <see cref="MinimumRequestTimeDistanceAttribute"/>.
         /// </summary>
         [TestClass]
         public class Ctor
@@ -36,10 +34,10 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             /// Tests whether the default constructor initializes the object with 30 seconds max. retention time.
             /// </summary>
             [TestMethod]
-            public void InitializesWith30SecondsMaxRetentionTime()
+            public void DefaultIsOneSeconds()
             {
-                var target = new FastRequestsProtectionAttribute();
-                Assert.AreEqual(3000, target.MaxRetentionTimeOfStatistics);
+                var target = new MinimumRequestTimeDistanceAttribute();
+                Assert.AreEqual(1, target.Seconds);
             }
         }
 
@@ -55,13 +53,13 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             [TestMethod]
             public void ImplementsActionFilterAttribute()
             {
-                var target = new FastRequestsProtectionAttribute();
+                var target = new MinimumRequestTimeDistanceAttribute();
                 Assert.IsInstanceOfType(target, typeof(ActionFilterAttribute));
             }
         }
 
         /// <summary>
-        /// Tests the method <see cref="FastRequestsProtectionAttribute.OnActionExecuting"/>.
+        /// Tests the method <see cref="MinimumRequestTimeDistanceAttribute.OnActionExecuting"/>.
         /// </summary>
         [TestClass]
         public class OnActionExecuting
@@ -75,12 +73,10 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 // we setup a request context that returns always the same session id
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost"), string.Empty, string.Empty);
 
-                // we want to allow max 2 requests in one second
-                var target = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2 };
+                // we want to allow max 1 requests in one second
+                var target = new MinimumRequestTimeDistanceAttribute();
 
-                // calling 3 times should throw an exception
-                target.OnActionExecuting(context);
-                target.OnActionExecuting(context);
+                // calling 2 times should not throw an exception
                 target.OnActionExecuting(context);
                 target.OnActionExecuting(context);
 
@@ -97,11 +93,10 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 // we setup a request context that returns always the same session id
                 var context = MvcTestBase.CreateRequestContext();
 
-                // we want to allow max 2 requests in one second
-                var target = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2 };
+                // we want to allow max 1 requests in one second
+                var target = new MinimumRequestTimeDistanceAttribute();
 
-                // calling 3 times should throw an exception
-                target.OnActionExecuting(context);
+                // calling 2 times should block execution
                 target.OnActionExecuting(context);
                 target.OnActionExecuting(context);
 
@@ -119,8 +114,8 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 // we setup a request context that returns always the same session id
                 var context = MvcTestBase.CreateRequestContext();
 
-                // we want to allow max 2 requests in one second
-                var target = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2, FaultAction = "Fault" };
+                // we want to allow max 1 requests in one second
+                var target = new MinimumRequestTimeDistanceAttribute { FaultAction = "Fault" };
 
                 // calling 3 times should throw an exception
                 target.OnActionExecuting(context);
@@ -143,12 +138,11 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 // we setup a request context that returns always the same session id
                 var context = MvcTestBase.CreateRequestContext();
 
-                // we want to allow max 2 requests in one second
-                var target1 = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2 };
-                var target2 = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2 };
+                // we want to allow max 1 requests in one second
+                var target1 = new MinimumRequestTimeDistanceAttribute();
+                var target2 = new MinimumRequestTimeDistanceAttribute();
 
-                // calling 3 times should throw an exception
-                target1.OnActionExecuting(context);
+                // calling 2 times should redirect
                 target2.OnActionExecuting(context);
                 target1.OnActionExecuting(context);
 
@@ -165,14 +159,14 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             {
                 var context = MvcTestBase.CreateRequestContext();
 
-                // we want to allow max 2 requests in one second
-                var target = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 2 };
+                // we want to allow max 1 requests in one second
+                var target = new MinimumRequestTimeDistanceAttribute();
 
-                // calling 2 times should NOT throw an exception
-                target.OnActionExecuting(context);
+                // calling 1 times should NOT throw an exception
                 target.OnActionExecuting(context);
 
-                Assert.IsNotNull(target);
+                var contentResult = context.Result as ContentResult;
+                Assert.IsNull(contentResult);
             }
 
             /// <summary>
@@ -185,24 +179,22 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 // we setup a request context that returns always the same session id
                 var context = MvcTestBase.CreateRequestContext();
 
-                // we want to allow max 2 requests in one second
-                var target = new FastRequestsProtectionAttribute
-                                 {
-                                     RequestsPerSecondAndClient = 2,
-                                     MaxRetentionTimeOfStatistics = 50,
-                                 };
+                // we want to allow max 1 requests in one second
+                var target = new MinimumRequestTimeDistanceAttribute();
+
+                // calling 1 times should NOT throw an exception
+                target.OnActionExecuting(context);
+                var contentResult1 = context.Result as ContentResult;
+                Assert.IsNull(contentResult1);
+
+                await Task.Delay(1001);
 
                 // calling 2 times should NOT throw an exception
                 target.OnActionExecuting(context);
-                target.OnActionExecuting(context);
 
-                await Task.Delay(100);
+                var contentResult2 = context.Result as ContentResult;
+                Assert.IsNull(contentResult2);
 
-                // calling 2 times should NOT throw an exception
-                target.OnActionExecuting(context);
-                target.OnActionExecuting(context);
-
-                Assert.IsNotNull(target);
             }
         }
     }

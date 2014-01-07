@@ -14,7 +14,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
     using System.Web.Mvc;
 
     using Sem.Authentication.MvcHelper.AppInfrastructure;
-    using Sem.Authentication.MvcHelper.Exceptions;
+    using Sem.Authentication.MvcHelper.Yubico.Client;
     using Sem.Authentication.MvcHelper.Yubico.Exceptions;
 
     using YubicoDotNetClient;
@@ -30,10 +30,15 @@ namespace Sem.Authentication.MvcHelper.Yubico
         private readonly YubikeyConfiguration configuration;
 
         /// <summary>
+        /// The client implementation of <see cref="IYubicoClient"/>.
+        /// </summary>
+        private readonly IYubicoClient client;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="YubikeyCheck"/> class.
         /// </summary>
         public YubikeyCheck()
-            : this(YubikeyConfiguration.DeserializeConfiguration())
+            : this(YubikeyConfiguration.DeserializeConfiguration(), new YubicoClientAbstraction())
         {
         }
 
@@ -41,10 +46,22 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// Initializes a new instance of the <see cref="YubikeyCheck"/> class.
         /// </summary>
         /// <param name="configuration"> The configuration. </param>
-        public YubikeyCheck(YubikeyConfiguration configuration)
+        /// <param name="client">The implementation of <see cref="IYubicoClient"/> to use.</param>
+        public YubikeyCheck(YubikeyConfiguration configuration, IYubicoClient client)
             : base(configuration)
         {
             this.configuration = configuration;
+            this.client = client;
+
+            if (configuration == null || configuration.Server == null || client == null)
+            {
+                return;
+            }
+
+            var server = this.configuration.Server;
+            this.client.ClientId = server.ClientId;
+            this.client.ApiKey = server.ApiKey;
+            this.client.SyncLevel = server.SyncLevel;
         }
 
         /// <summary>
@@ -77,15 +94,10 @@ namespace Sem.Authentication.MvcHelper.Yubico
 
             var otp = parameters["yubiKey"];
 
-            var server = this.configuration.Server;
-            var client = new YubicoClient(server.ClientId);
-            client.SetApiKey(server.ApiKey);
-            client.SetSync(server.SyncLevel);
-
             IYubicoResponse response;
             try
             {
-                response = client.Verify(otp);
+                response = this.client.Verify(otp);
             }
             catch (Exception ex)
             {
@@ -99,12 +111,18 @@ namespace Sem.Authentication.MvcHelper.Yubico
 
             var user = filterContext.HttpContext.User;
             var users = this.configuration.Users;
-            
+
+            if (users == null)
+            {
+                throw new InvalidOperationException("The Users property of the configuration is NULL.");
+            }
+
             // the response must be OK 
             // the name of the current http context identity must match, OR SkipIdentityNameCheck must be enabled
             if (response.Status == YubicoResponseStatus.Ok 
-             && ((this.SkipIdentityNameCheck && users.Any(x => x.ExternalId == response.PublicId))
-              || (users.FirstOrDefault(x => x.ExternalId == response.PublicId).Name == user.Identity.Name)))
+             && (this.SkipIdentityNameCheck 
+                    ? users.Any(x => x.ExternalId == response.PublicId)
+                    : users.Where(x => x.ExternalId == response.PublicId).Select(x => x.Name).FirstOrDefault() == user.Identity.Name))
             {
                 return;
             }

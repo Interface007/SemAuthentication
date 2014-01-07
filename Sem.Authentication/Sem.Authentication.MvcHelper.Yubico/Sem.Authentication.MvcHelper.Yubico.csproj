@@ -71,7 +71,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Client\IYubicoClient.cs" />
+    <Compile Include="Client\YubicoClientAbstraction.cs" />
     <Compile Include="Exceptions\YubikeyInvalidResponseException.cs" />
     <Compile Include="Exceptions\YubikeyNotPresentException.cs" />
     <Compile Include="Exceptions\YubikeyNullResponseException.cs" />

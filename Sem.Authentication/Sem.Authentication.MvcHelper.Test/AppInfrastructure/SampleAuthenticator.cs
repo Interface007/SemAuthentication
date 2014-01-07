@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using System.Web.Mvc;
 
     using Sem.Authentication.MvcHelper.AppInfrastructure;
@@ -26,6 +27,15 @@
 
         protected override void InternalAuthenticationCheck(ActionExecutingContext filterContext)
         {
+            if (filterContext != null 
+             && filterContext.HttpContext != null
+             && filterContext.HttpContext.Request != null
+             && filterContext.HttpContext.Request.Url != null
+             && filterContext.HttpContext.Request.Url.AbsoluteUri.Contains("exception"))
+            {
+                throw new InvalidOperationException("TESTEXCEPTION");
+            }
+            
             this.Checked = true;
         }
 

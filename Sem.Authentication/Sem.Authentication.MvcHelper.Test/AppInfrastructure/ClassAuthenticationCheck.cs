@@ -1,16 +1,26 @@
-﻿namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ClassAuthenticationCheck.cs" company="Sven Erik Matzen">
+//   (c) 2013 Sven Erik Matzen
+// </copyright>
+// <summary>
+//   Defines the ClassAuthenticationCheck type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
-    public static class AuthenticationCheckTest
+    public static class ClassAuthenticationCheck
     {
         [TestClass]
-        public class Loggong
+        public class Logging
         {
             [TestMethod]
             public void CreatesStandardLogger()
@@ -26,10 +36,10 @@
                 var target = new SampleAuthenticator(configuration);
                 target.LogException(new Exception("Sample"));
                 var result = target.InternalLogger;
-                
+
                 Assert.IsNotNull(result);
             }
-        
+
             [TestMethod]
             public void DoesNotThrowExceptionsIfLoggerNotCreatable()
             {
@@ -44,7 +54,7 @@
                 var target = new SampleAuthenticator(configuration);
                 target.LogException(new Exception("Sample"));
                 var result = target.InternalLogger;
-                
+
                 Assert.IsNull(result);
             }
         }
@@ -54,12 +64,25 @@
         {
             [TestMethod]
             [ExpectedException(typeof(ArgumentNullException))]
+            [ExcludeFromCodeCoverage]
             public void ThrowsIfContextIsNull()
             {
                 var target = new SampleAuthenticator(null);
                 target.OnActionExecuting(null);
             }
-        
+
+            [TestMethod]
+            public void RedirectsIfExceptionAndActionIsSet()
+            {
+                // todo: still having issues testing this: the newly generated UrlHelper needs "something" to build up a URL
+                var context = MvcTestBase.CreateRequestContext(new Uri("http://exception/Home/Index"));
+                var target = new SampleAuthenticator(new ConfigurationBase()) { InvalidKeyAction = "Index" };
+                target.OnActionExecuting(context);
+                var redirectResult = context.Result as RedirectResult;
+                Assert.IsNotNull(redirectResult);
+                Assert.AreEqual("/Home/Index/", redirectResult.Url);
+            }
+
             /// <summary>
             /// Because not initializing the http context will result in this property returning an <c>EmptyHttpContext</c> 
             /// (an internal type, so we cannot easily test for it), we will not get the expected <see cref="ArgumentNullException"/>
@@ -67,10 +90,20 @@
             /// </summary>
             [TestMethod]
             [ExpectedException(typeof(NotImplementedException))]
+            [ExcludeFromCodeCoverage]
             public void ThrowsIfContextHttpContextIsNull()
             {
                 var target = new SampleAuthenticator(null);
                 target.OnActionExecuting(new ActionExecutingContext());
+            }
+
+            [TestMethod]
+            public void ContinuesProcessingWhenUrlIsNull()
+            {
+                var context = MvcTestBase.CreateRequestContext((Uri)null);
+
+                var target = new SampleAuthenticator(new ConfigurationBase()) { ImageOnly = true, };
+                target.OnActionExecuting(context);
             }
         }
     }

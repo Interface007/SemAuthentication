@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClientStatisticTest.cs" company="Sven Erik Matzen">
+// <copyright file="ClassClientStatistic.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
@@ -14,10 +14,9 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Sem.Authentication.MvcHelper.InAppIps;
     using Sem.Authentication.MvcHelper.InAppIps.Processing;
 
-    public static class ClientStatisticTest
+    public static class ClassClientStatistic
     {
         [TestClass]
         public class Constructor

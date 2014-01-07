@@ -26,6 +26,11 @@ namespace Sem.Authentication.MvcHelper.InAppIps
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class MinimumRequestTimeDistanceAttribute : BaseGateAttribute
     {
+        public MinimumRequestTimeDistanceAttribute()
+        {
+            this.Seconds = 1;
+        }
+
         /// <summary>
         /// A unique name for this Throttle.
         /// </summary>
@@ -42,7 +47,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         /// show this.Seconds in the message, e.g. "Wait {n} seconds before trying again".
         /// </summary>
         public string Message { get; set; }
-        
+
         protected override bool StatisticsGate(string clientId, ConcurrentDictionary<string, ClientStatistic> statistics)
         {
             // no client id - nothing to do...
@@ -68,11 +73,6 @@ namespace Sem.Authentication.MvcHelper.InAppIps
                 null);                                  // no callback
 
             return true;
-        }
-
-        private string ExtractKey(ControllerContext c)
-        {
-            return string.Concat(this.Name, "-", c.HttpContext.Request.UserHostAddress, c.HttpContext.Request.Headers["REMOTE_ADDR"], c.HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"]);
         }
     }
 }

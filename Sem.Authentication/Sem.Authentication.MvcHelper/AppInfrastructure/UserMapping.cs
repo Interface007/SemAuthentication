@@ -14,8 +14,26 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
     /// <summary>
     /// The user mapping.
     /// </summary>
-    public struct UserMapping
+    public class UserMapping
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserMapping"/> class. 
+        /// </summary>
+        public UserMapping()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserMapping"/> class.
+        /// </summary>
+        /// <param name="name"> The name of the user. </param>
+        /// <param name="externalId"> The external id of the user. </param>
+        public UserMapping(string name, string externalId)
+        {
+            this.Name = name;
+            this.ExternalId = externalId;
+        }
+
         /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>

@@ -111,7 +111,8 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
 
                 // we have a configuration for the "error page action", so we redirect to there.
                 var urlHelper = new UrlHelper(filterContext.RequestContext);
-                filterContext.Result = new RedirectResult(urlHelper.Action(this.InvalidKeyAction));
+                var action = urlHelper.Action(this.InvalidKeyAction);
+                filterContext.Result = new RedirectResult(action);
             }
         }
 

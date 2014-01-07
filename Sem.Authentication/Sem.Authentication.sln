@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication.MvcHelpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication.MvcHelper.Yubico", "Sem.Authentication.MvcHelper.Yubico\Sem.Authentication.MvcHelper.Yubico.csproj", "{C0147F75-A32D-448B-AE10-8A3F1D9446DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication.MvcHelper.Yubico.Test", "Sem.Authentication.MvcHelper.Yubico.Test\Sem.Authentication.MvcHelper.Yubico.Test.csproj", "{C02300E3-D044-4C1D-9FE3-58B6344DB69C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C0147F75-A32D-448B-AE10-8A3F1D9446DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0147F75-A32D-448B-AE10-8A3F1D9446DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0147F75-A32D-448B-AE10-8A3F1D9446DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C02300E3-D044-4C1D-9FE3-58B6344DB69C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C02300E3-D044-4C1D-9FE3-58B6344DB69C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C02300E3-D044-4C1D-9FE3-58B6344DB69C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C02300E3-D044-4C1D-9FE3-58B6344DB69C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
