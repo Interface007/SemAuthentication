@@ -94,7 +94,7 @@ namespace Sem.Authentication.MvcHelper.Test
             return new ActionExecutingContext
                        {
                            RequestContext = requestContext,
-                           Controller = controller.Object,
+                           Controller = controller,
                        };
         }
 
@@ -110,6 +110,16 @@ namespace Sem.Authentication.MvcHelper.Test
             return new HtmlHelper(ViewContext(new Uri("http://test/"), Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"), new NameValueCollection()), container.Object);
         }
 
+        /// <summary>
+        /// Generates a request context.
+        /// </summary>
+        /// <param name="requestUrl"> The request url. </param>
+        /// <param name="sessionId"> The session id. </param>
+        /// <param name="clientIP"> The client IP. </param>
+        /// <param name="formCollection"> The http FORM collection. </param>
+        /// <param name="values"> The values for the route data. </param>
+        /// <param name="username"> The username. </param>
+        /// <returns> The <see cref="RequestContext(System.Uri,string,string,System.Collections.Specialized.NameValueCollection,object,string)"/>. </returns>
         private static RequestContext RequestContext(Uri requestUrl, string sessionId, string clientIP, NameValueCollection formCollection, object values, string username)
         {
             var requestBase = RequestBase(requestUrl, clientIP, formCollection);
@@ -117,7 +127,13 @@ namespace Sem.Authentication.MvcHelper.Test
             return RequestContext(httpContext, values);
         }
 
-        private static Mock<Controller> Controller(RequestContext requestContext, RouteCollection routes)
+        /// <summary>
+        /// Creates an initialized controller.
+        /// </summary>
+        /// <param name="requestContext"> The request context for the controller. </param>
+        /// <param name="routes"> The routes for the <see cref="UrlHelper"/>. </param>
+        /// <returns> The <see cref="Mock"/>. </returns>
+        private static Controller Controller(RequestContext requestContext, RouteCollection routes)
         {
             var urlHelper = new UrlHelper(requestContext, routes);
             var controller = new Mock<Controller>();
@@ -128,9 +144,14 @@ namespace Sem.Authentication.MvcHelper.Test
                 RouteTable.Routes.Add(route);
             }
 
-            return controller;
+            return controller.Object;
         }
 
+        /// <summary>
+        /// Generates a default route collection.
+        /// </summary>
+        /// <param name="values"> The default values. </param>
+        /// <returns> The <see cref="RouteCollection"/>. </returns>
         private static RouteCollection RouteCollection(object values)
         {
             return new RouteCollection
@@ -144,16 +165,28 @@ namespace Sem.Authentication.MvcHelper.Test
                              };
         }
 
+        /// <summary>
+        /// Generates an initialized <see cref="HttpContextBase"/>.
+        /// </summary>
+        /// <param name="sessionId"> The session id. </param>
+        /// <param name="requestBase"> The request base. </param>
+        /// <param name="username"> The username for the identity of the current user. </param>
+        /// <returns> The <see cref="HttpContextBase"/>. </returns>
         private static HttpContextBase HttpContext(string sessionId, HttpRequestBase requestBase, string username)
         {
             var httpContext = new Moq.Mock<HttpContextBase>();
-            httpContext.Setup(x => x.Session).Returns(SessionState(sessionId).Object);
+            httpContext.Setup(x => x.Session).Returns(SessionState(sessionId));
             httpContext.Setup(x => x.Request).Returns(requestBase);
-            httpContext.Setup(x => x.Response).Returns(Response().Object);
+            httpContext.Setup(x => x.Response).Returns(Response());
             httpContext.Setup(x => x.User).Returns(User(username));
             return httpContext.Object;
         }
 
+        /// <summary>
+        /// Creates an initialized <see cref="IPrincipal"/> for a given user name.
+        /// </summary>
+        /// <param name="username"> The username. </param>
+        /// <returns> The <see cref="IPrincipal"/>. </returns>
         private static IPrincipal User(string username)
         {
             var user = new Mock<IPrincipal>();
@@ -163,20 +196,36 @@ namespace Sem.Authentication.MvcHelper.Test
             return user.Object;
         }
 
-        private static Mock<HttpResponseBase> Response()
+        /// <summary>
+        /// Generates a ready to use <see cref="HttpResponseBase"/> object.
+        /// </summary>
+        /// <returns> The <see cref="Mock"/>. </returns>
+        private static HttpResponseBase Response()
         {
             var response = new Mock<HttpResponseBase>();
             response.Setup(r => r.ApplyAppPathModifier(It.IsAny<string>())).Returns((string s) => s);
-            return response;
+            return response.Object;
         }
 
-        private static Mock<HttpSessionStateBase> SessionState(string sessionId)
+        /// <summary>
+        /// Generates an initialized <see cref="HttpSessionStateBase"/>.
+        /// </summary>
+        /// <param name="sessionId"> The session id. </param>
+        /// <returns> The <see cref="HttpSessionStateBase"/>. </returns>
+        private static HttpSessionStateBase SessionState(string sessionId)
         {
             var sessionState = new Mock<HttpSessionStateBase>();
             sessionState.Setup(x => x.SessionID).Returns(sessionId);
-            return sessionState;
+            return sessionState.Object;
         }
 
+        /// <summary>
+        /// Generates an initialized <see cref="HttpRequestBase"/>.
+        /// </summary>
+        /// <param name="requestUrl"> The request url. </param>
+        /// <param name="clientIP"> The client IP this request should simulate. </param>
+        /// <param name="formCollection"> The form value collection. </param>
+        /// <returns> The <see cref="HttpRequestBase"/>. </returns>
         private static HttpRequestBase RequestBase(Uri requestUrl, string clientIP, NameValueCollection formCollection)
         {
             var path = requestUrl == null ? string.Empty : requestUrl.AbsolutePath;
@@ -196,6 +245,12 @@ namespace Sem.Authentication.MvcHelper.Test
             return requestBase.Object;
         }
 
+        /// <summary>
+        /// Generates an initialized <see cref="RequestContext(System.Uri,string,string,System.Collections.Specialized.NameValueCollection,object,string)"/>.
+        /// </summary>
+        /// <param name="httpContext"> The http context. </param>
+        /// <param name="values"> The route values. </param>
+        /// <returns> The <see cref="RequestContext(System.Uri,string,string,System.Collections.Specialized.NameValueCollection,object,string)"/>. </returns>
         private static RequestContext RequestContext(HttpContextBase httpContext, object values)
         {
             var requestContext = new Moq.Mock<RequestContext>();
@@ -205,6 +260,11 @@ namespace Sem.Authentication.MvcHelper.Test
             return requestContext.Object;
         }
 
+        /// <summary>
+        /// Generates an initialized <see cref="RouteData"/>.
+        /// </summary>
+        /// <param name="values"> The values. </param>
+        /// <returns> The <see cref="RouteData"/>. </returns>
         private static RouteData RouteData(object values)
         {
             var routeData = new RouteData
@@ -223,6 +283,14 @@ namespace Sem.Authentication.MvcHelper.Test
             return routeData;
         }
 
+        /// <summary>
+        /// Generates an initialized <see cref="ViewContext"/>.
+        /// </summary>
+        /// <param name="requestUrl"> The request URL. </param>
+        /// <param name="sessionId"> The session id. </param>
+        /// <param name="clientIP"> The client IP. </param>
+        /// <param name="formCollection"> The form value collection. </param>
+        /// <returns> The <see cref="ViewContext"/>. </returns>
         private static ViewContext ViewContext(Uri requestUrl, string sessionId, string clientIP, NameValueCollection formCollection)
         {
             object values = new
@@ -236,7 +304,7 @@ namespace Sem.Authentication.MvcHelper.Test
             var requestContext = RequestContext(requestUrl, sessionId, clientIP, formCollection, values, "userName");
             var routes = RouteCollection(values);
             var controller = Controller(requestContext, routes);
-            viewContext.Setup(x => x.Controller).Returns(controller.Object);
+            viewContext.Setup(x => x.Controller).Returns(controller);
             return viewContext.Object;
         }
     }

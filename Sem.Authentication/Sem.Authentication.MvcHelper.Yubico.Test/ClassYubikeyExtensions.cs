@@ -13,11 +13,20 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
 
     using Sem.Authentication.MvcHelper.Test;
 
+    /// <summary>
+    /// Tests for the class <see cref="YubikeyExtensions"/>.
+    /// </summary>
     public static class ClassYubikeyExtensions
     {
+        /// <summary>
+        /// Tests the method <see cref="YubikeyExtensions.YubikeyInput(System.Web.Mvc.HtmlHelper,string)"/>.
+        /// </summary>
         [TestClass]
         public class YubikeyInput
         {
+            /// <summary>
+            /// Validates that it renders the expected html for an input box without an image.
+            /// </summary>
             [TestMethod]
             public void RendersExpectedInputBox()
             {
@@ -26,6 +35,9 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 Assert.AreEqual(Expected, result.ToHtmlString());
             }
 
+            /// <summary>
+            /// Validates that it renders the expected html for the input box with an image from a specific URL url.
+            /// </summary>
             [TestMethod]
             public void RendersExpectedInputBoxWithImageForUrl()
             {
@@ -34,6 +46,9 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 Assert.AreEqual(Expected, result.ToHtmlString());
             }
 
+            /// <summary>
+            /// Validates that it renders the expected html for the input box with an image for specific action.
+            /// </summary>
             [TestMethod]
             public void RendersExpectedInputBoxWithImageForAction()
             {
