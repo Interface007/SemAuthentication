@@ -19,6 +19,6 @@ namespace Sem.Authentication.MvcHelper.Yubico.Client
         
         string SyncLevel { get; set; }
 
-        IYubicoResponse Verify(string otp);
+        IYubicoResponse Verify(string onetimePassword);
     }
 }

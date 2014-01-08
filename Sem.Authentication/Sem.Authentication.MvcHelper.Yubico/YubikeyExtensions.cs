@@ -44,12 +44,14 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// <param name="targetAction"> The target action or target url. If you want a full URL to use, make sure you did add the protocol (https/http). </param>
         /// <param name="configuration"> The configuration to validate. </param>
         /// <returns> The <see cref="IHtmlString"/>. </returns>
-        public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper, string targetAction, YubikeyConfiguration configuration)
+        public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper, string targetAction, ConfigurationBase configuration)
         {
             configuration.EnsureCorrectConfiguration();
+            targetAction.ArgumentMustNotBeNull("targetAction");
 
             if (!targetAction.Contains(":"))
             {
+                htmlHelper.ArgumentMustNotBeNull("htmlHelper");
                 var controller = (System.Web.Mvc.Controller)htmlHelper.ViewContext.Controller;
                 targetAction = controller.Url.Action(targetAction);
             }
@@ -75,7 +77,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// <param name="htmlHelper"> The htmlHelper. </param>
         /// <param name="configuration"> The configuration to validate. </param>
         /// <returns> The <see cref="IHtmlString"/>. </returns>
-        public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper, YubikeyConfiguration configuration)
+        public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper, ConfigurationBase configuration)
         {
             configuration.EnsureCorrectConfiguration();
             return new HtmlString("<span class=\"yubikeyCaption\" >YubiKey: <span/>" + YubikeyInputBox);

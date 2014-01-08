@@ -18,6 +18,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Exceptions
     /// <summary>
     /// The YUBIKEY invalid response exception.
     /// </summary>
+    [Serializable]
     public class YubikeyInvalidResponseException : AuthenticationFilterException
     {
         /// <summary>

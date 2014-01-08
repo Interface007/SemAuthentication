@@ -10,6 +10,9 @@
 namespace Sem.Authentication.MvcHelper.AppInfrastructure
 {
     using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Extension methods for the configuration object.
@@ -30,6 +33,17 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
             if (configuration.Exception != null)
             {
                 throw configuration.Exception;
+            }
+        }
+
+        public static void ArgumentMustNotBeNull<T>([ValidatedNotNull]this T value, string argumentName, [CallerFilePath] string path = "", [CallerLineNumber] int line = 0)
+            where T : class
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(
+                    string.Format(CultureInfo.InvariantCulture, "The argument must not be null in file {0}, line {1}.", path, line),
+                    argumentName);
             }
         }
     }

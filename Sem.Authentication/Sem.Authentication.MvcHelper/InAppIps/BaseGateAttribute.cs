@@ -16,6 +16,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
     using System.Net;
     using System.Web.Mvc;
 
+    using Sem.Authentication.MvcHelper.AppInfrastructure;
     using Sem.Authentication.MvcHelper.InAppIps.Processing;
 
     /// <summary>
@@ -65,6 +66,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            filterContext.ArgumentMustNotBeNull("filterContext");
             var context = filterContext.HttpContext;
             if (context != null)
             {

@@ -14,6 +14,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
     using System.Diagnostics;
     using System.Linq;
 
+    using Sem.Authentication.MvcHelper.AppInfrastructure;
     using Sem.Authentication.MvcHelper.InAppIps.Processing;
 
     /// <summary>
@@ -65,6 +66,8 @@ namespace Sem.Authentication.MvcHelper.InAppIps
             {
                 return true;
             }
+
+            statistics.ArgumentMustNotBeNull("statistics");
 
             // cleanup old statistics (we will not take care for clients that are slower than 1 request per X millisec.)
             var time = DateTime.UtcNow.AddMilliseconds(-this.MaxRetentionTimeOfStatistics);

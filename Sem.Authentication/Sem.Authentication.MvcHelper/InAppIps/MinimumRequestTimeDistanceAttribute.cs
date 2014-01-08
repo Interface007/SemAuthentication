@@ -21,7 +21,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
     /// This attribute does enforce a minimum time between two requests from the same IP.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class MinimumRequestTimeDistanceAttribute : BaseGateAttribute
+    public sealed class MinimumRequestTimeDistanceAttribute : BaseGateAttribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MinimumRequestTimeDistanceAttribute"/> class with 

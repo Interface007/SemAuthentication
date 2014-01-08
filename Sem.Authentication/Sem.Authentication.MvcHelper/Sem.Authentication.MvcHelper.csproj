@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,16 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'CodeAnalysis|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\CodeAnalysis\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,9 +60,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppInfrastructure\AuthenticationCheck.cs" />
+    <Compile Include="..\Shared\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="AppInfrastructure\AuthenticationCheckAttribute.cs" />
     <Compile Include="AppInfrastructure\Extensions.cs" />
     <Compile Include="AppInfrastructure\ISemAudit.cs" />
+    <Compile Include="AppInfrastructure\ValidatedNotNullAttribute.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InAppIps\BaseGateAttribute.cs" />
     <Compile Include="InAppIps\Processing\ClientStatistic.cs" />
     <Compile Include="AppInfrastructure\ConfigurationBase.cs" />
@@ -69,12 +86,14 @@
     <Compile Include="AppInfrastructure\UserMapping.cs" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="Properties\CustomDictionary.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="NuGet\Sem.Authentication.MvcHelper.1.0.0.nupkg" />
     <None Include="NuGet\Sem.Authentication.MvcHelper.1.0.0.nuspec" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\Shared\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

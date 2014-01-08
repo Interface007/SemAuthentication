@@ -11,6 +11,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
     using System.Web;
     using System.Xml.Serialization;
@@ -47,7 +48,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
 
             if (!File.Exists(path))
             {
-                return new YubikeyConfiguration { Exception = new FileNotFoundException(string.Format("The configuration file YubiKey.xml cannot be found. You need to place this file into the path {0} to make this application work. Have a look at https://semauthentication.codeplex.com/ for details about this module.", HttpRuntime.AppDomainAppPath)) };
+                return new YubikeyConfiguration { Exception = new FileNotFoundException(string.Format(CultureInfo.InvariantCulture, "The configuration file YubiKey.xml cannot be found. You need to place this file into the path {0} to make this application work. Have a look at https://semauthentication.codeplex.com/ for details about this module.", HttpRuntime.AppDomainAppPath)) };
             }
 
             using (var file = File.OpenRead(path))

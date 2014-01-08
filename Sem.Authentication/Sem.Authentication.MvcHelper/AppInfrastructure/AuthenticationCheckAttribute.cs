@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AuthenticationCheck.cs" company="Sven Erik Matzen">
+// <copyright file="AuthenticationCheckAttribute.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the AuthenticationCheck type.
+//   Defines the AuthenticationCheckAttribute type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
     /// <summary>
     /// The authentication check base class.
     /// </summary>
-    public abstract class AuthenticationCheck : ActionFilterAttribute
+    public abstract class AuthenticationCheckAttribute : ActionFilterAttribute
     {
         /// <summary>
         /// The configuration.
@@ -23,10 +23,10 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         private readonly ConfigurationBase configuration;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationCheck"/> class.
+        /// Initializes a new instance of the <see cref="AuthenticationCheckAttribute"/> class.
         /// </summary>
         /// <param name="configuration"> The configuration. </param>
-        protected AuthenticationCheck(ConfigurationBase configuration)
+        protected AuthenticationCheckAttribute(ConfigurationBase configuration)
         {
             this.configuration = configuration;
         }

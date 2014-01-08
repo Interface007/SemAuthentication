@@ -23,6 +23,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// <param name="exception"> The exception to be logged. </param>
         public void Log(Exception exception)
         {
+            exception.ArgumentMustNotBeNull("exception");
             Debug.Print(exception.ToString());
         }
     }

@@ -29,7 +29,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
     using YubicoDotNetClient;
 
     /// <summary>
-    /// The bundels the tests for <see cref="YubikeyCheck"/>.
+    /// The bundels the tests for <see cref="YubikeyCheckAttribute"/>.
     /// </summary>
     public static class ClassYubikeyCheck
     {
@@ -41,7 +41,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
             [ExcludeFromCodeCoverage]
             public void NullConfigurationThrowsWhenInstance()
             {
-                var target = new YubikeyCheck(null, new YubicoClientAbstraction()) { ImageOnly = true };
+                var target = new YubikeyCheckAttribute(null, new YubicoClientAbstraction()) { ImageOnly = true };
                 target.OnActionExecuting(MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/?42FE943EC8A64735A978D1F81D5FFD00", UriKind.Absolute)));
             }
 
@@ -59,7 +59,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                                                          }
                                         };
 
-                var target = new YubikeyCheck(configuration, client) { ImageOnly = true };
+                var target = new YubikeyCheckAttribute(configuration, client) { ImageOnly = true };
 
                 Assert.IsNotNull(target);
                 Assert.AreEqual("apikey", client.ApiKey);
@@ -76,7 +76,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
             {
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/?42FE943EC8A64735A978D1F81D5FFD00", UriKind.Absolute));
 
-                var target = new YubikeyCheck(new YubikeyConfiguration(), new YubicoClientAbstraction()) { ImageOnly = true };
+                var target = new YubikeyCheckAttribute(new YubikeyConfiguration(), new YubicoClientAbstraction()) { ImageOnly = true };
                 target.OnActionExecuting(context);
 
                 var fileResult = context.Result as FileResult;
@@ -89,7 +89,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
             {
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute));
 
-                var target = new YubikeyCheck(new YubikeyConfiguration(), new YubicoClientAbstraction()) { ImageOnly = true };
+                var target = new YubikeyCheckAttribute(new YubikeyConfiguration(), new YubicoClientAbstraction()) { ImageOnly = true };
                 target.OnActionExecuting(context);
 
                 Assert.IsNull(context.Result);
@@ -103,7 +103,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
 
                 client.Verify();
@@ -119,7 +119,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
             }
 
@@ -133,7 +133,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
             }
 
@@ -147,7 +147,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKez", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
             }
 
@@ -166,7 +166,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
             }
 
@@ -178,7 +178,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
             }
 
@@ -190,7 +190,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection, "some name");
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = false, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = false, };
                 target.OnActionExecuting(context);
             }
 
@@ -204,7 +204,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection, "some unknown name");
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = false, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = false, };
                 target.OnActionExecuting(context);
             }
 
@@ -218,7 +218,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
             }
 
@@ -232,7 +232,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
 
-                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                var target = new YubikeyCheckAttribute(configuration, client.Object) { SkipIdentityNameCheck = true, };
                 target.OnActionExecuting(context);
             }
 

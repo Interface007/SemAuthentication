@@ -9,11 +9,14 @@
 
 namespace Sem.Authentication.MvcHelper.Yubico.Exceptions
 {
+    using System;
+
     using Sem.Authentication.MvcHelper.Exceptions;
 
     /// <summary>
     /// The YUBIKEY not present exception will be thrown when the key value is not present inside the request.
     /// </summary>
+    [Serializable]
     public class YubikeyNotPresentException : AuthenticationFilterException
     {
     }

@@ -16,7 +16,7 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     [ExcludeFromCodeCoverage]
-    public class SampleAuthenticator : AuthenticationCheck
+    public class SampleAuthenticator : AuthenticationCheckAttribute
     {
         public SampleAuthenticator(ConfigurationBase configuration)
             : base(configuration)

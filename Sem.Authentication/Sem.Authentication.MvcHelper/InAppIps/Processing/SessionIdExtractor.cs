@@ -23,7 +23,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps.Processing
         /// <returns> The <see cref="string"/> representing the "unique" id of the client. </returns>
         public string Extract(HttpContextBase context)
         {
-            return context.Session == null ? string.Empty : context.Session.SessionID;
+            return context == null || context.Session == null ? string.Empty : context.Session.SessionID;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Sem.Authentication.MvcHelper.Exceptions
     /// <summary>
     /// The authentication filter exception.
     /// </summary>
+    [Serializable]
     public class AuthenticationFilterException : Exception
     {
         /// <summary>

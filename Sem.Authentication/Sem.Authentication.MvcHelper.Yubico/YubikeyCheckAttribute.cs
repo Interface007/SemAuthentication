@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="YubikeyCheck.cs" company="Sven Erik Matzen">
+// <copyright file="YubikeyCheckAttribute.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the YubikeyCheck type.
+//   Defines the YubikeyCheckAttribute type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -23,7 +23,8 @@ namespace Sem.Authentication.MvcHelper.Yubico
     /// <summary>
     /// MVC filter attribute to add a request filter that does check for a YUBIKEY and its validity.
     /// </summary>
-    public class YubikeyCheck : AuthenticationCheck
+    [AttributeUsage(AttributeTargets.Method)]
+    public sealed class YubikeyCheckAttribute : AuthenticationCheckAttribute
     {
         /// <summary>
         /// The server configuration.
@@ -36,20 +37,20 @@ namespace Sem.Authentication.MvcHelper.Yubico
         private readonly IYubicoClient client;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="YubikeyCheck"/> class.
+        /// Initializes a new instance of the <see cref="YubikeyCheckAttribute"/> class.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public YubikeyCheck()
+        public YubikeyCheckAttribute()
             : this(YubikeyConfiguration.DeserializeConfiguration(), new YubicoClientAbstraction())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="YubikeyCheck"/> class.
+        /// Initializes a new instance of the <see cref="YubikeyCheckAttribute"/> class.
         /// </summary>
         /// <param name="configuration"> The configuration. </param>
         /// <param name="client">The implementation of <see cref="IYubicoClient"/> to use.</param>
-        public YubikeyCheck(YubikeyConfiguration configuration, IYubicoClient client)
+        public YubikeyCheckAttribute(YubikeyConfiguration configuration, IYubicoClient client)
             : base(configuration)
         {
             this.configuration = configuration;
