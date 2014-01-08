@@ -10,6 +10,8 @@
 namespace Sem.Authentication.MvcHelper.Yubico.Exceptions
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.Serialization;
 
     using Sem.Authentication.MvcHelper.Exceptions;
 
@@ -26,8 +28,8 @@ namespace Sem.Authentication.MvcHelper.Yubico.Exceptions
         /// </summary>
         /// <param name="status"> The response status. </param>
         public YubikeyInvalidResponseException(YubicoResponseStatus status)
+            : this(status, null)
         {
-            this.Status = status;
         }
 
         /// <summary>
@@ -39,6 +41,17 @@ namespace Sem.Authentication.MvcHelper.Yubico.Exceptions
             : base("Error while executing request.", exception)
         {
             this.Status = status;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YubikeyInvalidResponseException"/> class.
+        /// </summary>
+        /// <param name="info"> The info. </param>
+        /// <param name="context"> The context. </param>
+        [ExcludeFromCodeCoverage]
+        protected YubikeyInvalidResponseException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
         }
 
         /// <summary>

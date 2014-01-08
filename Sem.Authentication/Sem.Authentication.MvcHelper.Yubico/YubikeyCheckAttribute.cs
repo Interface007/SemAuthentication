@@ -27,16 +27,6 @@ namespace Sem.Authentication.MvcHelper.Yubico
     public sealed class YubikeyCheckAttribute : AuthenticationCheckAttribute
     {
         /// <summary>
-        /// The server configuration.
-        /// </summary>
-        private readonly YubikeyConfiguration configuration;
-
-        /// <summary>
-        /// The client implementation of <see cref="IYubicoClient"/>.
-        /// </summary>
-        private readonly IYubicoClient client;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="YubikeyCheckAttribute"/> class.
         /// </summary>
         [ExcludeFromCodeCoverage]
@@ -53,19 +43,29 @@ namespace Sem.Authentication.MvcHelper.Yubico
         public YubikeyCheckAttribute(YubikeyConfiguration configuration, IYubicoClient client)
             : base(configuration)
         {
-            this.configuration = configuration;
-            this.client = client;
+            this.Configuration = configuration;
+            this.Client = client;
 
             if (configuration == null || configuration.Server == null || client == null)
             {
                 return;
             }
 
-            var server = this.configuration.Server;
-            this.client.ClientId = server.ClientId;
-            this.client.ApiKey = server.ApiKey;
-            this.client.SyncLevel = server.SyncLevel;
+            var server = this.Configuration.Server;
+            this.Client.ClientId = server.ClientId;
+            this.Client.ApiKey = server.ApiKey;
+            this.Client.SyncLevel = server.SyncLevel;
         }
+
+        /// <summary>
+        /// The server configuration.
+        /// </summary>
+        public YubikeyConfiguration Configuration { get; private set; }
+
+        /// <summary>
+        /// The client implementation of <see cref="IYubicoClient"/>.
+        /// </summary>
+        public IYubicoClient Client { get; private set; }
 
         /// <summary>
         /// Gets the name of the image to be returned for this authenticator.
@@ -74,7 +74,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
         {
             get
             {
-                this.configuration.EnsureCorrectConfiguration();
+                this.Configuration.EnsureCorrectConfiguration();
                 return "yubikey-finger.png";
             }
         }
@@ -85,7 +85,8 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// <param name="filterContext">The filter context.</param>
         protected override void InternalAuthenticationCheck(ActionExecutingContext filterContext)
         {
-            this.configuration.EnsureCorrectConfiguration();
+            this.Configuration.EnsureCorrectConfiguration();
+            filterContext.ArgumentMustNotBeNull("filterContext");
 
             // to validate, we need the value of the key - have a look if we can find it.
             var parameters = filterContext.HttpContext.Request.Form;
@@ -100,7 +101,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
             IYubicoResponse response;
             try
             {
-                response = this.client.Verify(otp);
+                response = this.Client.Verify(otp);
             }
             catch (Exception ex)
             {
@@ -113,7 +114,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
             }
 
             var user = filterContext.HttpContext.User;
-            var users = this.configuration.Users;
+            var users = this.Configuration.Users;
 
             if (users == null)
             {
@@ -122,8 +123,8 @@ namespace Sem.Authentication.MvcHelper.Yubico
 
             // the response must be OK 
             // the name of the current http context identity must match, OR SkipIdentityNameCheck must be enabled
-            if (response.Status == YubicoResponseStatus.Ok 
-             && (this.SkipIdentityNameCheck 
+            if (response.Status == YubicoResponseStatus.Ok
+             && (this.SkipIdentityNameCheck
                     ? users.Any(x => x.ExternalId == response.PublicId)
                     : users.Where(x => x.ExternalId == response.PublicId).Select(x => x.Name).FirstOrDefault() == user.Identity.Name))
             {

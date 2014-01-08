@@ -41,5 +41,23 @@
                 config.EnsureCorrectConfiguration();
             }
         }
+
+        [TestClass]
+        public class ArgumentMustNotBeNull
+        {
+            [TestMethod]
+            [ExpectedException(typeof(ArgumentNullException))]
+            [ExcludeFromCodeCoverage]
+            public void ThrowsIfArgumentIsNull()
+            {
+                ((ArgumentMustNotBeNull)null).ArgumentMustNotBeNull("sample");
+            }
+        
+            [TestMethod]
+            public void ThrowsNotIfArgumentIsNotNull()
+            {
+                this.ArgumentMustNotBeNull("sample");
+            }
+        }
     }
 }
