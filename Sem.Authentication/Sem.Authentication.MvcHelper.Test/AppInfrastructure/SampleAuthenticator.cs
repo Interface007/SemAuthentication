@@ -1,8 +1,16 @@
-﻿namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SampleAuthenticator.cs" company="Sven Erik Matzen">
+//   (c) 2013 Sven Erik Matzen
+// </copyright>
+// <summary>
+//   Defines the SampleAuthenticator type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.IO;
     using System.Web.Mvc;
 
     using Sem.Authentication.MvcHelper.AppInfrastructure;

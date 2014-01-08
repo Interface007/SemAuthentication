@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FastRequestsProtectionAttribute.cs" company="Sven Erik Matzen">
+// <copyright file="BaseGateAttribute.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
@@ -31,7 +31,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         private readonly IEnumerable<ContextProcessor> contextProcessors;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FastRequestsProtectionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="BaseGateAttribute"/> class. 
         /// </summary>
         protected BaseGateAttribute()
             : this(typeof(SessionIdExtractor), typeof(UserHostExtractor))
@@ -39,9 +39,9 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FastRequestsProtectionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="BaseGateAttribute"/> class. 
         /// </summary>
-        /// <param name="extractors">The types of extractors to use.</param>
+        /// <param name="extractors"> The types of extractors to use. </param>
         protected BaseGateAttribute(params Type[] extractors)
         {
             this.contextProcessors = 

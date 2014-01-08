@@ -34,6 +34,11 @@ namespace Sem.Authentication.MvcHelper.InAppIps.Processing
                                    : string.Empty;
         }
 
+        /// <summary>
+        /// Gets the first part of a string separated by a ",".
+        /// </summary>
+        /// <param name="value"> The value. </param>
+        /// <returns> The <see cref="string"/>. </returns>
         private static string GetFirstPart(string value)
         {
             value = value ?? string.Empty;

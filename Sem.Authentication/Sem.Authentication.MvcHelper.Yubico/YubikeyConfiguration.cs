@@ -10,6 +10,7 @@
 namespace Sem.Authentication.MvcHelper.Yubico
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Web;
     using System.Xml.Serialization;
@@ -38,6 +39,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// Deserializes the configuration from a file <c>YubiKey.xml</c> in the application path of the app domain.
         /// </summary>
         /// <returns> The <see cref="YubikeyConfiguration"/>. </returns>
+        [ExcludeFromCodeCoverage]
         public static YubikeyConfiguration DeserializeConfiguration()
         {
             var serializer = new XmlSerializer(typeof(YubikeyConfiguration));

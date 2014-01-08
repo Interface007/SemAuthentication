@@ -11,6 +11,7 @@ namespace Sem.Authentication.MvcHelper.Test
 {
     using System;
     using System.Collections.Specialized;
+    using System.Security.Principal;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -64,6 +65,20 @@ namespace Sem.Authentication.MvcHelper.Test
         /// <returns> The <see cref="Mock"/> object for the request context.  </returns>
         public static ActionExecutingContext CreateRequestContext(Uri requestUrl, string sessionId, string clientIP, NameValueCollection formCollection)
         {
+            return CreateRequestContext(requestUrl, sessionId, clientIP, formCollection, "UserName");
+        }
+
+        /// <summary>
+        /// Creates a new request context that returns a distinct, but always the same, session id.
+        /// </summary>
+        /// <param name="requestUrl">The URL the request should fake.</param>
+        /// <param name="sessionId"> The session Id for the request. </param>
+        /// <param name="clientIP"> The client IP for the request. </param>
+        /// <param name="formCollection">The collection of form data items.</param>
+        /// <param name="userName">The name of the user the identity should contain.</param>
+        /// <returns> The <see cref="Mock"/> object for the request context.  </returns>
+        public static ActionExecutingContext CreateRequestContext(Uri requestUrl, string sessionId, string clientIP, NameValueCollection formCollection, string userName)
+        {
             object values = new
                                 {
                                     controller = "Home",
@@ -71,25 +86,49 @@ namespace Sem.Authentication.MvcHelper.Test
                                     id = UrlParameter.Optional
                                 };
 
-            var requestBase = RequestBase(requestUrl, clientIP, formCollection);
-            var httpContext = HttpContext(sessionId, requestBase);
-            var requestContext = RequestContext(httpContext, values);
+            var requestContext = RequestContext(requestUrl, sessionId, clientIP, formCollection, values, userName);
             var routes = RouteCollection(values);
 
-            var urlHelper = new UrlHelper(requestContext.Object, routes);
+            var controller = Controller(requestContext, routes);
+
+            return new ActionExecutingContext
+                       {
+                           RequestContext = requestContext,
+                           Controller = controller.Object,
+                       };
+        }
+
+        /// <summary>
+        /// Creates an initialized <see cref="HtmlHelper"/> object.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="HtmlHelper"/>.
+        /// </returns>
+        public static HtmlHelper CreateHtmlHelper()
+        {
+            var container = new Mock<IViewDataContainer>();
+            return new HtmlHelper(ViewContext(new Uri("http://test/"), Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"), new NameValueCollection()), container.Object);
+        }
+
+        private static RequestContext RequestContext(Uri requestUrl, string sessionId, string clientIP, NameValueCollection formCollection, object values, string username)
+        {
+            var requestBase = RequestBase(requestUrl, clientIP, formCollection);
+            var httpContext = HttpContext(sessionId, requestBase, username);
+            return RequestContext(httpContext, values);
+        }
+
+        private static Mock<Controller> Controller(RequestContext requestContext, RouteCollection routes)
+        {
+            var urlHelper = new UrlHelper(requestContext, routes);
             var controller = new Mock<Controller>();
             controller.Object.Url = urlHelper;
             RouteTable.Routes.Clear();
             foreach (var route in routes)
             {
-                RouteTable.Routes.Add(route);                
+                RouteTable.Routes.Add(route);
             }
 
-            return new ActionExecutingContext
-                       {
-                           RequestContext = requestContext.Object,
-                           Controller = controller.Object,
-                       };
+            return controller;
         }
 
         private static RouteCollection RouteCollection(object values)
@@ -105,13 +144,23 @@ namespace Sem.Authentication.MvcHelper.Test
                              };
         }
 
-        private static Mock<HttpContextBase> HttpContext(string sessionId, Mock<HttpRequestBase> requestBase)
+        private static HttpContextBase HttpContext(string sessionId, HttpRequestBase requestBase, string username)
         {
             var httpContext = new Moq.Mock<HttpContextBase>();
             httpContext.Setup(x => x.Session).Returns(SessionState(sessionId).Object);
-            httpContext.Setup(x => x.Request).Returns(requestBase.Object);
+            httpContext.Setup(x => x.Request).Returns(requestBase);
             httpContext.Setup(x => x.Response).Returns(Response().Object);
-            return httpContext;
+            httpContext.Setup(x => x.User).Returns(User(username));
+            return httpContext.Object;
+        }
+
+        private static IPrincipal User(string username)
+        {
+            var user = new Mock<IPrincipal>();
+            var identity = new Mock<IIdentity>();
+            identity.Setup(x => x.Name).Returns(username);
+            user.Setup(x => x.Identity).Returns(identity.Object);
+            return user.Object;
         }
 
         private static Mock<HttpResponseBase> Response()
@@ -128,7 +177,7 @@ namespace Sem.Authentication.MvcHelper.Test
             return sessionState;
         }
 
-        private static Mock<HttpRequestBase> RequestBase(Uri requestUrl, string clientIP, NameValueCollection formCollection)
+        private static HttpRequestBase RequestBase(Uri requestUrl, string clientIP, NameValueCollection formCollection)
         {
             var path = requestUrl == null ? string.Empty : requestUrl.AbsolutePath;
             var requestBase = new Mock<HttpRequestBase>();
@@ -144,16 +193,16 @@ namespace Sem.Authentication.MvcHelper.Test
             requestBase.Setup(x => x.Url).Returns(requestUrl);
             requestBase.Setup(x => x.UserHostAddress).Returns(clientIP);
             requestBase.Setup(x => x.UserHostName).Returns(clientIP);
-            return requestBase;
+            return requestBase.Object;
         }
 
-        private static Mock<RequestContext> RequestContext(Mock<HttpContextBase> httpContext, object values)
+        private static RequestContext RequestContext(HttpContextBase httpContext, object values)
         {
             var requestContext = new Moq.Mock<RequestContext>();
-            requestContext.Setup(x => x.HttpContext).Returns(httpContext.Object);
+            requestContext.Setup(x => x.HttpContext).Returns(httpContext);
             requestContext.Setup(x => x.RouteData).Returns(RouteData(values));
 
-            return requestContext;
+            return requestContext.Object;
         }
 
         private static RouteData RouteData(object values)
@@ -172,6 +221,23 @@ namespace Sem.Authentication.MvcHelper.Test
             routeData.Values.Add("controller", "Home");
             routeData.Values.Add("action", "Index");
             return routeData;
+        }
+
+        private static ViewContext ViewContext(Uri requestUrl, string sessionId, string clientIP, NameValueCollection formCollection)
+        {
+            object values = new
+                {
+                    controller = "Home",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                };
+
+            var viewContext = new Mock<ViewContext>();
+            var requestContext = RequestContext(requestUrl, sessionId, clientIP, formCollection, values, "userName");
+            var routes = RouteCollection(values);
+            var controller = Controller(requestContext, routes);
+            viewContext.Setup(x => x.Controller).Returns(controller.Object);
+            return viewContext.Object;
         }
     }
 }

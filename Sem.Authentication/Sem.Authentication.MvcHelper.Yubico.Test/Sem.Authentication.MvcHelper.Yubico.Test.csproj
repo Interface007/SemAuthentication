@@ -86,7 +86,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="YubikeyCheckClass.cs" />
+    <Compile Include="ClassYubikeyCheck.cs" />
+    <Compile Include="ClassYubikeyExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -10,6 +10,7 @@
 namespace Sem.Authentication.MvcHelper.Yubico
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -37,6 +38,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// <summary>
         /// Initializes a new instance of the <see cref="YubikeyCheck"/> class.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public YubikeyCheck()
             : this(YubikeyConfiguration.DeserializeConfiguration(), new YubicoClientAbstraction())
         {

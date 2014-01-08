@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="YubikeyCheckClass.cs" company="Sven Erik Matzen">
+// <copyright file="ClassYubikeyCheck.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
@@ -28,7 +28,10 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
 
     using YubicoDotNetClient;
 
-    public static class YubikeyCheckClass
+    /// <summary>
+    /// The bundels the tests for <see cref="YubikeyCheck"/>.
+    /// </summary>
+    public static class ClassYubikeyCheck
     {
         [TestClass]
         public class Constructor
@@ -40,6 +43,28 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
             {
                 var target = new YubikeyCheck(null, new YubicoClientAbstraction()) { ImageOnly = true };
                 target.OnActionExecuting(MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/?42FE943EC8A64735A978D1F81D5FFD00", UriKind.Absolute)));
+            }
+
+            [TestMethod]
+            public void ConfiguresClient()
+            {
+                var client = new YubicoClientAbstraction();
+                var configuration = new YubikeyConfiguration
+                                        {
+                                            Server = new ServerConfiguration
+                                                         {
+                                                             ApiKey = "apikey", 
+                                                             ClientId = "clientid", 
+                                                             SyncLevel = "synclevel",
+                                                         }
+                                        };
+
+                var target = new YubikeyCheck(configuration, client) { ImageOnly = true };
+
+                Assert.IsNotNull(target);
+                Assert.AreEqual("apikey", client.ApiKey);
+                Assert.AreEqual("clientid", client.ClientId);
+                Assert.AreEqual("synclevel", client.SyncLevel);
             }
         }
 
@@ -157,6 +182,60 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
                 target.OnActionExecuting(context);
             }
 
+            [TestMethod]
+            public void ThrowsNotWhenKnownIdAndMatchingUser()
+            {
+                var client = SetupClient(YubicoResponseStatus.Ok, "some id");
+                var configuration = new YubikeyConfiguration { Users = new List<UserMapping> { new UserMapping("some name", "some id") } };
+                var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
+                var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection, "some name");
+
+                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = false, };
+                target.OnActionExecuting(context);
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(YubikeyInvalidResponseException))]
+            [ExcludeFromCodeCoverage]
+            public void ThrowsWhenUnKnownIdAndMatchingUser()
+            {
+                var client = SetupClient(YubicoResponseStatus.Ok, "some id");
+                var configuration = new YubikeyConfiguration { Users = new List<UserMapping> { new UserMapping("some name", "some id") } };
+                var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
+                var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection, "some unknown name");
+
+                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = false, };
+                target.OnActionExecuting(context);
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(InvalidOperationException))]
+            [ExcludeFromCodeCoverage]
+            public void ThrowsInvalidOperationExceptionWhenNoUsers()
+            {
+                var client = SetupClient(YubicoResponseStatus.Ok, "some id");
+                var configuration = new YubikeyConfiguration { Users = null };
+                var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
+                var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
+
+                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                target.OnActionExecuting(context);
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(YubikeyNullResponseException))]
+            [ExcludeFromCodeCoverage]
+            public void ThrowsNullResponseExceptionForNullResponse()
+            {
+                var client = SetupClient();
+                var configuration = new YubikeyConfiguration { Users = new List<UserMapping> { new UserMapping("some name", "some id") } };
+                var formCollection = new NameValueCollection { { "yubiKey", "some id" } };
+                var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute), null, null, formCollection);
+
+                var target = new YubikeyCheck(configuration, client.Object) { SkipIdentityNameCheck = true, };
+                target.OnActionExecuting(context);
+            }
+
             private static Mock<IYubicoClient> SetupClient(YubicoResponseStatus responseStatus, string publicId)
             {
                 var response = new Mock<IYubicoResponse>();
@@ -165,6 +244,13 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
 
                 var client = new Mock<IYubicoClient>();
                 client.Setup(x => x.Verify(It.IsAny<string>())).Returns(response.Object).Verifiable();
+                return client;
+            }
+
+            private static Mock<IYubicoClient> SetupClient()
+            {
+                var client = new Mock<IYubicoClient>();
+                client.Setup(x => x.Verify(It.IsAny<string>())).Returns((IYubicoResponse)null).Verifiable();
                 return client;
             }
         }

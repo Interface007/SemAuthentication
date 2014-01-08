@@ -9,6 +9,7 @@
 
 namespace Sem.Authentication.MvcHelper.Yubico
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Web;
     using System.Web.Mvc;
 
@@ -30,9 +31,22 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// <param name="htmlHelper"> The htmlHelper. </param>
         /// <param name="targetAction"> The target action or target url. If you want a full URL to use, make sure you did add the protocol (https/http). </param>
         /// <returns> The <see cref="IHtmlString"/>. </returns>
+        [ExcludeFromCodeCoverage]
         public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper, string targetAction)
         {
-            YubikeyConfiguration.DeserializeConfiguration().EnsureCorrectConfiguration();
+            return YubikeyInput(htmlHelper, targetAction, YubikeyConfiguration.DeserializeConfiguration());
+        }
+
+        /// <summary>
+        /// Renders an input tag for the YUBIKEY OTP and an image tag as a "caption".
+        /// </summary>
+        /// <param name="htmlHelper"> The htmlHelper. </param>
+        /// <param name="targetAction"> The target action or target url. If you want a full URL to use, make sure you did add the protocol (https/http). </param>
+        /// <param name="configuration"> The configuration to validate. </param>
+        /// <returns> The <see cref="IHtmlString"/>. </returns>
+        public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper, string targetAction, YubikeyConfiguration configuration)
+        {
+            configuration.EnsureCorrectConfiguration();
 
             if (!targetAction.Contains(":"))
             {
@@ -49,9 +63,21 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// </summary>
         /// <param name="htmlHelper"> The htmlHelper. </param>
         /// <returns> The <see cref="IHtmlString"/>. </returns>
+        [ExcludeFromCodeCoverage]
         public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper)
         {
-            YubikeyConfiguration.DeserializeConfiguration().EnsureCorrectConfiguration();
+            return YubikeyInput(htmlHelper, YubikeyConfiguration.DeserializeConfiguration());
+        }
+
+        /// <summary>
+        /// Renders an input tag for the YUBIKEY OTP and a SPAN tag as a "caption".
+        /// </summary>
+        /// <param name="htmlHelper"> The htmlHelper. </param>
+        /// <param name="configuration"> The configuration to validate. </param>
+        /// <returns> The <see cref="IHtmlString"/>. </returns>
+        public static IHtmlString YubikeyInput(this HtmlHelper htmlHelper, YubikeyConfiguration configuration)
+        {
+            configuration.EnsureCorrectConfiguration();
             return new HtmlString("<span class=\"yubikeyCaption\" >YubiKey: <span/>" + YubikeyInputBox);
         }
     }
