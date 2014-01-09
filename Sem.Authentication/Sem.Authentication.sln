@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication.MvcHelpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication.MvcHelper.Yubico.Test", "Sem.Authentication.MvcHelper.Yubico.Test\Sem.Authentication.MvcHelper.Yubico.Test.csproj", "{C02300E3-D044-4C1D-9FE3-58B6344DB69C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A463C7C1-5A54-4384-A80F-7C6FE2591E50}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.txt = ReadMe.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU

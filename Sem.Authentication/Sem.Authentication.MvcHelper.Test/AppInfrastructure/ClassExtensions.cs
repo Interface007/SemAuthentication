@@ -1,4 +1,13 @@
-﻿namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ClassExtensions.cs" company="Sven Erik Matzen">
+//   (c) 2013 Sven Erik Matzen
+// </copyright>
+// <summary>
+//   Defines the ClassExtensions type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -57,6 +66,24 @@
             public void ThrowsNotIfArgumentIsNotNull()
             {
                 this.ArgumentMustNotBeNull("sample");
+            }
+        }
+
+        [TestClass]
+        public class ArgumentPropertyMustNotBeNull
+        {
+            [TestMethod]
+            [ExpectedException(typeof(ArgumentOutOfRangeException))]
+            [ExcludeFromCodeCoverage]
+            public void ThrowsIfArgumentIsNull()
+            {
+                new AuditInfo<Exception>("name", "action").ArgumentPropertyMustNotBeNull("sample", "Details", x => x.Details);
+            }
+        
+            [TestMethod]
+            public void ThrowsNotIfArgumentIsNotNull()
+            {
+                new AuditInfo<Exception>("name", "action").ArgumentPropertyMustNotBeNull("sample", "User", x => x.User);
             }
         }
     }

@@ -55,9 +55,27 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
             }
         }
 
+        public ISemAudit InternalAudit
+        {
+            get
+            {
+                return this.Audit;
+            }
+        }
+
         public void LogException(Exception exception)
         {
             this.Log(exception);
+        }
+
+        public void AuditEvent(Exception exception, ActionExecutingContext filterContext)
+        {
+            this.AuditFailure(filterContext, exception);
+        }
+
+        public void AuditEvent(ActionExecutingContext filterContext)
+        {
+            this.AuditSuccess(filterContext);
         }
     }
 }

@@ -63,6 +63,11 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         protected ISemAuthLogger Logger { get; set; }
 
         /// <summary>
+        /// Gets or sets the audit implementation.
+        /// </summary>
+        protected ISemAudit Audit { get; set; }
+
+        /// <summary>
         /// Called by the ASP.NET MVC framework before the action method executes.
         /// </summary>
         /// <param name="filterContext">The filter context.</param>
@@ -96,10 +101,12 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
                 }
 
                 this.InternalAuthenticationCheck(filterContext);
+                this.AuditSuccess(filterContext);
             }
             catch (Exception ex)
             {
                 this.Log(ex);
+                this.AuditFailure(filterContext, ex);
 
                 // if we don't know where to redirect to, we simply re-throw the exception
                 if (string.IsNullOrEmpty(this.InvalidKeyAction) || filterContext == null)
@@ -128,11 +135,72 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// <param name="ex"> The exception to be logged. </param>
         protected void Log(Exception ex)
         {
-            var logger = this.Logger ?? this.CreateLogger();
+            var logger = this.Logger ?? (this.Logger = this.CreateLogger());
             if (logger != null)
             {
                 logger.Log(ex);
             }
+        }
+
+        /// <summary>
+        /// Creates an audit writer and logs the exception.
+        /// </summary>
+        /// <param name="filterContext"></param>
+        /// <param name="exception"> The exception. </param>
+        protected void AuditFailure(ActionExecutingContext filterContext, Exception exception)
+        {
+            var audit = this.Audit ?? (this.Audit = this.CreateAudit());
+            if (audit == null)
+            {
+                return;
+            }
+
+            filterContext.ArgumentMustNotBeNull("filterContext");
+            audit.AuthenticationCheckFailed(new AuditInfo<Exception>(filterContext.RequestContext, exception));
+        }
+
+        protected void AuditSuccess(ControllerContext filterContext)
+        {
+            var audit = this.Audit ?? (this.Audit = this.CreateAudit());
+            if (audit == null)
+            {
+                return;
+            }
+
+            filterContext.ArgumentMustNotBeNull("filterContext");
+            audit.AuthenticationCheckSucceeded(new AuditInfo<Exception>(filterContext.RequestContext));
+        }
+
+        /// <summary>
+        /// The create type instance.
+        /// </summary>
+        /// <param name="typeConfiguration"> The type configuration. </param>
+        /// <typeparam name="T"> The type to return. </typeparam>
+        /// <returns> The new instance of <see cref="T"/>. </returns>
+        private static T CreateTypeInstance<T>(TypeConfiguration typeConfiguration)
+            where T : class
+        {
+            if (typeConfiguration == null || string.IsNullOrEmpty(typeConfiguration.TypeName))
+            {
+                return null;
+            }
+
+            var loggerType = Type.GetType(typeConfiguration.TypeName);
+            if (loggerType == null)
+            {
+                return null;
+            }
+
+            return (T)Activator.CreateInstance(loggerType);
+        }
+
+        /// <summary>
+        /// Creates an audit writer instance according to the type configured in the file <c>YubiKey.xml</c>.
+        /// </summary>
+        /// <returns> The <see cref="ISemAudit"/> implementation. </returns>
+        private ISemAudit CreateAudit()
+        {
+            return this.configuration == null ? null : CreateTypeInstance<ISemAudit>(this.configuration.Audit);
         }
 
         /// <summary>
@@ -141,18 +209,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// <returns> The <see cref="ISemAuthLogger"/> implementation. </returns>
         private ISemAuthLogger CreateLogger()
         {
-            if (this.configuration == null || this.configuration.Logger == null || string.IsNullOrEmpty(this.configuration.Logger.TypeName))
-            {
-                return null;
-            }
-
-            var loggerType = Type.GetType(this.configuration.Logger.TypeName);
-            if (loggerType == null)
-            {
-                return null;
-            } 
-            
-            return this.Logger = (ISemAuthLogger)Activator.CreateInstance(loggerType);
+            return this.configuration == null ? null : CreateTypeInstance<ISemAuthLogger>(this.configuration.Logger);
         }
     }
 }

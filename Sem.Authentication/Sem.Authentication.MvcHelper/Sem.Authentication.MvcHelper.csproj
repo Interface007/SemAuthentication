@@ -63,7 +63,9 @@
     <Compile Include="..\Shared\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="AppInfrastructure\AuditInfo.cs" />
     <Compile Include="AppInfrastructure\AuthenticationCheckAttribute.cs" />
+    <Compile Include="AppInfrastructure\DebugAudit.cs" />
     <Compile Include="AppInfrastructure\Extensions.cs" />
     <Compile Include="AppInfrastructure\ISemAudit.cs" />
     <Compile Include="AppInfrastructure\ValidatedNotNullAttribute.cs" />
@@ -76,7 +78,7 @@
     <Compile Include="InAppIps\Processing\ContextProcessor.cs" />
     <Compile Include="InAppIps\FastRequestsProtectionAttribute.cs" />
     <Compile Include="AppInfrastructure\ISemAuthLogger.cs" />
-    <Compile Include="AppInfrastructure\LoggerConfiguration.cs" />
+    <Compile Include="AppInfrastructure\TypeConfiguration.cs" />
     <Compile Include="InAppIps\Processing\IIdExtractor.cs" />
     <Compile Include="InAppIps\MinimumRequestTimeDistanceAttribute.cs" />
     <Compile Include="InAppIps\Processing\SessionIdExtractor.cs" />

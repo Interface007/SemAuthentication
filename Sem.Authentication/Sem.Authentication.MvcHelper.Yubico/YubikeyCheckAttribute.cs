@@ -58,12 +58,12 @@ namespace Sem.Authentication.MvcHelper.Yubico
         }
 
         /// <summary>
-        /// The server configuration.
+        /// Gets the server configuration.
         /// </summary>
         public YubikeyConfiguration Configuration { get; private set; }
 
         /// <summary>
-        /// The client implementation of <see cref="IYubicoClient"/>.
+        /// Gets the client implementation of <see cref="IYubicoClient"/>.
         /// </summary>
         public IYubicoClient Client { get; private set; }
 

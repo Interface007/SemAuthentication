@@ -15,5 +15,14 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
     /// </summary>
     public interface ISemAudit
     {
+        /// <summary>
+        /// Writes information about the failure of an action into the audit log.
+        /// </summary>
+        void AuthenticationCheckFailed<T>(AuditInfo<T> info);
+
+        /// <summary>
+        /// Writes information about successes into the audit log.
+        /// </summary>
+        void AuthenticationCheckSucceeded<T>(AuditInfo<T> info);
     }
 }

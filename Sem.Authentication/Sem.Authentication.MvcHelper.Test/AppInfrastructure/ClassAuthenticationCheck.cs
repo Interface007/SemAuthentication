@@ -20,18 +20,69 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
     public static class ClassAuthenticationCheck
     {
         [TestClass]
+        public class Auditing
+        {
+            [TestMethod]
+            public void CreatesNoAuditByDefault()
+            {
+                var configuration = new ConfigurationBase();
+                var target = new SampleAuthenticator(configuration);
+                target.AuditEvent(new Exception("Sample"), MvcTestBase.CreateRequestContext());
+                var result = target.InternalAudit;
+
+                Assert.IsNull(result);
+            }
+
+            [TestMethod]
+            public void CreatesCallsAuditForFailureByDefault()
+            {
+                var configuration = new ConfigurationBase
+                    {
+                        Audit = new TypeConfiguration
+                        {
+                            TypeName = "Sem.Authentication.MvcHelper.AppInfrastructure.DebugAudit, Sem.Authentication.MvcHelper",
+                        }
+                    };
+
+                var target = new SampleAuthenticator(configuration);
+                target.AuditEvent(new Exception("Sample"), MvcTestBase.CreateRequestContext());
+                var result = target.InternalAudit;
+
+                Assert.IsNotNull(result);
+            }
+
+            [TestMethod]
+            public void CreatesCallsAuditForSuccessByDefault()
+            {
+                var configuration = new ConfigurationBase
+                    {
+                        Audit = new TypeConfiguration
+                        {
+                            TypeName = "Sem.Authentication.MvcHelper.AppInfrastructure.DebugAudit, Sem.Authentication.MvcHelper",
+                        }
+                    };
+
+                var target = new SampleAuthenticator(configuration);
+                target.AuditEvent(MvcTestBase.CreateRequestContext());
+                var result = target.InternalAudit;
+
+                Assert.IsNotNull(result);
+            }
+        }
+
+        [TestClass]
         public class Logging
         {
             [TestMethod]
             public void CreatesStandardLogger()
             {
                 var configuration = new ConfigurationBase
+                    {
+                        Logger = new TypeConfiguration
                                         {
-                                            Logger = new LoggerConfiguration
-                                                         {
-                                                             TypeName = "Sem.Authentication.MvcHelper.AppInfrastructure.DebugLogger, Sem.Authentication.MvcHelper",
-                                                         }
-                                        };
+                                            TypeName = "Sem.Authentication.MvcHelper.AppInfrastructure.DebugLogger, Sem.Authentication.MvcHelper",
+                                        }
+                    };
 
                 var target = new SampleAuthenticator(configuration);
                 target.LogException(new Exception("Sample"));
@@ -44,12 +95,12 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
             public void DoesNotThrowExceptionsIfLoggerNotCreatable()
             {
                 var configuration = new ConfigurationBase
+                    {
+                        Logger = new TypeConfiguration
                                         {
-                                            Logger = new LoggerConfiguration
-                                                         {
-                                                             TypeName = "Sem.Authentication.MvcHelper.A598D4BDB7244B62A4A158201C118882, Sem.Authentication.MvcHelper",
-                                                         }
-                                        };
+                                            TypeName = "Sem.Authentication.MvcHelper.A598D4BDB7244B62A4A158201C118882, Sem.Authentication.MvcHelper",
+                                        }
+                    };
 
                 var target = new SampleAuthenticator(configuration);
                 target.LogException(new Exception("Sample"));

@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LoggerConfiguration.cs" company="Sven Erik Matzen">
+// <copyright file="TypeConfiguration.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the LoggerConfiguration type.
+//   Defines the TypeConfiguration type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
     /// <summary>
     /// The configuration for the logging functionality.
     /// </summary>
-    public class LoggerConfiguration
+    public class TypeConfiguration
     {
         /// <summary>
         /// Gets or sets the type name of the logger to use.

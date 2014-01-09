@@ -26,6 +26,11 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// <summary>
         /// Gets or sets the logger to write logging information.
         /// </summary>
-        public LoggerConfiguration Logger { get; set; }
+        public TypeConfiguration Logger { get; set; }
+
+        /// <summary>
+        /// Gets or sets the logger to write audit information.
+        /// </summary>
+        public TypeConfiguration Audit { get; set; }
     }
 }
