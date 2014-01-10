@@ -16,20 +16,31 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
 
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
+    /// <summary>
+    /// Tests the methods of the class <see cref="Extensions"/>.
+    /// </summary>
     public static class ClassExtensions
     {
+        /// <summary>
+        /// Tests the method <see cref="Extensions.EnsureCorrectConfiguration"/>.
+        /// </summary>
         [TestClass]
         public class EnsureCorrectConfiguration
         {
+            /// <summary>
+            /// The method should throw an exception if the configuration is null.
+            /// </summary>
             [TestMethod]
             [ExpectedException(typeof(ArgumentNullException))]
             [ExcludeFromCodeCoverage]
             public void ThrowsIfConfigurationIsNull()
             {
-                var config = null as ConfigurationBase;
-                config.EnsureCorrectConfiguration();
+                (null as ConfigurationBase).EnsureCorrectConfiguration();
             }
 
+            /// <summary>
+            /// The method should throw an exception if an exception has been set inside the configuration base instance.
+            /// </summary>
             [TestMethod]
             [ExpectedException(typeof(ArgumentOutOfRangeException))]
             [ExcludeFromCodeCoverage]
@@ -39,10 +50,13 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
                     {
                         Exception = new ArgumentOutOfRangeException()
                     };
-                
+
                 config.EnsureCorrectConfiguration();
             }
 
+            /// <summary>
+            /// The method should not throw an exception if the configuration is ok.
+            /// </summary>
             [TestMethod]
             public void ThrowsNotIfConfigurationIsOk()
             {
@@ -51,9 +65,15 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
             }
         }
 
+        /// <summary>
+        /// Tests the method <see cref="Extensions.ArgumentMustNotBeNull{T}"/>.
+        /// </summary>
         [TestClass]
         public class ArgumentMustNotBeNull
         {
+            /// <summary>
+            /// The method should throw an exception if the argument is null.
+            /// </summary>
             [TestMethod]
             [ExpectedException(typeof(ArgumentNullException))]
             [ExcludeFromCodeCoverage]
@@ -61,7 +81,10 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
             {
                 ((ArgumentMustNotBeNull)null).ArgumentMustNotBeNull("sample");
             }
-        
+
+            /// <summary>
+            /// The method should NOT throw an exception if the argument is not null.
+            /// </summary>
             [TestMethod]
             public void ThrowsNotIfArgumentIsNotNull()
             {
@@ -69,9 +92,15 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
             }
         }
 
+        /// <summary>
+        /// Tests the method <see cref="Extensions.ArgumentPropertyMustNotBeNull{T,TParameter}"/>.
+        /// </summary>
         [TestClass]
         public class ArgumentPropertyMustNotBeNull
         {
+            /// <summary>
+            /// The method should throw an exception if the argument-property is null.
+            /// </summary>
             [TestMethod]
             [ExpectedException(typeof(ArgumentOutOfRangeException))]
             [ExcludeFromCodeCoverage]
@@ -79,7 +108,10 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
             {
                 new AuditInfo<Exception>("name", "action").ArgumentPropertyMustNotBeNull("sample", "Details", x => x.Details);
             }
-        
+
+            /// <summary>
+            /// The method should NOT throw an exception if the argument-property is not null.
+            /// </summary>
             [TestMethod]
             public void ThrowsNotIfArgumentIsNotNull()
             {

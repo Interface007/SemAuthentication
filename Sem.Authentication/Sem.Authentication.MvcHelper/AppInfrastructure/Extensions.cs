@@ -65,11 +65,12 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// </summary>
         /// <param name="value"> The reference to the argument. </param>
         /// <param name="argumentName"> The name of the argument. </param>
-        /// <param name="propertyName"></param>
+        /// <param name="propertyName"> The name of the property. </param>
         /// <param name="parameterAccessor"> A function to access the parameter that should be validated. </param>
         /// <param name="path"> The path to the source file (will be resolved automatically by the compiler). </param>
         /// <param name="line"> The line of the source file (will be resolved automatically by the compiler). </param>
         /// <typeparam name="T"> The type of the argument. </typeparam>
+        /// <typeparam name="TParameter"> The type of the argument-property. </typeparam>
         /// <exception cref="ArgumentNullException"> In case of <paramref name="value"/> == null. </exception>
         /// <returns>The value of <paramref name="value"/>.</returns>
         public static T ArgumentPropertyMustNotBeNull<T, TParameter>([ValidatedNotNull] this T value, string argumentName, string propertyName, Func<T, TParameter> parameterAccessor, [CallerFilePath] string path = "", [CallerLineNumber] int line = 0)

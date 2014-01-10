@@ -31,7 +31,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
         /// </summary>
         [ExcludeFromCodeCoverage]
         public YubikeyCheckAttribute()
-            : this(YubikeyConfiguration.DeserializeConfiguration(), new YubicoClientAbstraction())
+            : this(YubikeyConfiguration.DeserializeConfiguration(), new YubicoClientAdapter())
         {
         }
 

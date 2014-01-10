@@ -11,7 +11,6 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
 {
     using System;
     using System.Diagnostics;
-    using System.Runtime.InteropServices;
 
     /// <summary>
     /// The sample debug logger implementation. This logger implementation does simply print the information to the debug window of Visual Studio.

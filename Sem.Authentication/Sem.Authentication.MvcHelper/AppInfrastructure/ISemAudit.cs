@@ -18,11 +18,15 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// <summary>
         /// Writes information about the failure of an action into the audit log.
         /// </summary>
+        /// <typeparam name="T"> The type of detail data </typeparam>
+        /// <param name="info"> The information about the user, the action and the details.  </param>
         void AuthenticationCheckFailed<T>(AuditInfo<T> info);
 
         /// <summary>
         /// Writes information about successes into the audit log.
         /// </summary>
+        /// <typeparam name="T"> The type of detail data </typeparam>
+        /// <param name="info"> The information about the user, the action and the details. </param>
         void AuthenticationCheckSucceeded<T>(AuditInfo<T> info);
     }
 }

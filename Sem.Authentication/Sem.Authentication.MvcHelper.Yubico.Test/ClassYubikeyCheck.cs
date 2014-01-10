@@ -41,14 +41,14 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
             [ExcludeFromCodeCoverage]
             public void NullConfigurationThrowsWhenInstance()
             {
-                var target = new YubikeyCheckAttribute(null, new YubicoClientAbstraction()) { ImageOnly = true };
+                var target = new YubikeyCheckAttribute(null, new YubicoClientAdapter()) { ImageOnly = true };
                 target.OnActionExecuting(MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/?42FE943EC8A64735A978D1F81D5FFD00", UriKind.Absolute)));
             }
 
             [TestMethod]
             public void ConfiguresClient()
             {
-                var client = new YubicoClientAbstraction();
+                var client = new YubicoClientAdapter();
                 var configuration = new YubikeyConfiguration
                                         {
                                             Server = new ServerConfiguration
@@ -76,7 +76,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
             {
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/?42FE943EC8A64735A978D1F81D5FFD00", UriKind.Absolute));
 
-                var target = new YubikeyCheckAttribute(new YubikeyConfiguration(), new YubicoClientAbstraction()) { ImageOnly = true };
+                var target = new YubikeyCheckAttribute(new YubikeyConfiguration(), new YubicoClientAdapter()) { ImageOnly = true };
                 target.OnActionExecuting(context);
 
                 var fileResult = context.Result as FileResult;
@@ -89,7 +89,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
             {
                 var context = MvcTestBase.CreateRequestContext(new Uri("http://localhost/test/", UriKind.Absolute));
 
-                var target = new YubikeyCheckAttribute(new YubikeyConfiguration(), new YubicoClientAbstraction()) { ImageOnly = true };
+                var target = new YubikeyCheckAttribute(new YubikeyConfiguration(), new YubicoClientAdapter()) { ImageOnly = true };
                 target.OnActionExecuting(context);
 
                 Assert.IsNull(context.Result);

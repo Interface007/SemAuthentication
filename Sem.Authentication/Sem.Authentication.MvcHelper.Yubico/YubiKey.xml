@@ -12,8 +12,13 @@
     <User Name="SvenErik" ExternalId="ccccccbughkn" />
   </Users>
 
-  <!-- You might provide a logger instance here - it just needs to implement the very simple 
+  <!-- You might provide a logger type name here - it just needs to implement the very simple 
        interface ISemAuthLogger to map the calls from this library to the logging library
        of your choice. -->
-  <Logger TypeName="Sem.Authentication.MvcHelper.DebugLogger, Sem.Authentication.MvcHelper" />
+  <Logger TypeName="Sem.Authentication.MvcHelper.AppInfrastructure.DebugLogger, Sem.Authentication.MvcHelper" />
+
+  <!-- You might provide an audit writer type name here - it just needs to implement the very simple 
+       interface ISemAudit to map the calls from this library to the logging library
+       of your choice. -->
+  <Audit  TypeName="Sem.Authentication.MvcHelper.AppInfrastructure.DebugAudit,  Sem.Authentication.MvcHelper" />
 </YubikeyConfiguration>

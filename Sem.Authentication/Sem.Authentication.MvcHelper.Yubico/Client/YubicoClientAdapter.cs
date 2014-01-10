@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="YubicoClientAbstraction.cs" company="Sven Erik Matzen">
+// <copyright file="YubicoClientAdapter.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the YubicoClientAbstraction type.
+//   Defines the YubicoClientAdapter type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,10 +15,11 @@ namespace Sem.Authentication.MvcHelper.Yubico.Client
 
     /// <summary>
     /// This class does add an abstraction layer to the sealed <see cref="YubicoClient"/>, so we can
-    /// write unit tests without using the real client implementation.
+    /// write unit tests without using the real client implementation. See <see cref="http://en.wikipedia.org/wiki/Adapter_pattern"/>.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class YubicoClientAbstraction : IYubicoClient
+
+    public class YubicoClientAdapter : IYubicoClient
     {
         /// <summary>
         /// Gets or sets the client id that you did get from YUBICO to access the server API.

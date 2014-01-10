@@ -145,7 +145,7 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
         /// <summary>
         /// Creates an audit writer and logs the exception.
         /// </summary>
-        /// <param name="filterContext"></param>
+        /// <param name="filterContext">The current filter context to get the user and the action.</param>
         /// <param name="exception"> The exception. </param>
         protected void AuditFailure(ActionExecutingContext filterContext, Exception exception)
         {
@@ -156,9 +156,13 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
             }
 
             filterContext.ArgumentMustNotBeNull("filterContext");
-            audit.AuthenticationCheckFailed(new AuditInfo<Exception>(filterContext.RequestContext, exception));
+            audit.AuthenticationCheckFailed(new AuditInfo<string>(filterContext.RequestContext, exception.Message));
         }
 
+        /// <summary>
+        /// Creates an audit writer and logs the success.
+        /// </summary>
+        /// <param name="filterContext">The current filter context to get the user and the action.</param>
         protected void AuditSuccess(ControllerContext filterContext)
         {
             var audit = this.Audit ?? (this.Audit = this.CreateAudit());
