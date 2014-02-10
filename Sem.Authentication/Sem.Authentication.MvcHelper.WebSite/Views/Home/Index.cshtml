@@ -1,4 +1,5 @@
-﻿@using Sem.Authentication.MvcHelper.Yubico
+﻿@using Sem.Authentication.MvcHelper.InAppIps
+@using Sem.Authentication.MvcHelper.Yubico
 
 @{
     ViewBag.Title = "Home Page";
@@ -17,7 +18,7 @@
     </div>
     <div class="col-md-4">
         <h2>Fast Request Protector</h2>
-        <p>Try requesting thid´s page faster than one request per second.</p>
+        <p>Try requesting this page faster than one request per second.</p>
         <p><a class="btn btn-default" href="@Url.Action("OnlyOneRequestPerSecond")">Only one Request per Second &raquo;</a></p>
     </div>
     <div class="col-md-4">
@@ -29,6 +30,26 @@
             <p>
                 @* The input box you might omit the action in this call, but then you will only get a span with the input element instead of the image and the input element *@
                 @Html.YubikeyInput("YubikeyProtected")
+                <input type="submit" class="btn btn-default" value="try it &raquo;" />
+            </p>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Simple Form-Landmine</h2>
+        <p>
+            This MVC action is protected by a form landmine.
+        </p>
+        <form method="POST" action="@Url.Action("LandMineProtected")">
+            <p>
+                @Html.Landmine()
+                <input type="submit" class="btn btn-default" value="try it &raquo;" />
+            </p>
+        </form>
+        <form method="POST" action="@Url.Action("LandMineProtected")">
+            <p>
+                <input type="text" name="Landmine" value="this value is not expected" />
                 <input type="submit" class="btn btn-default" value="try it &raquo;" />
             </p>
         </form>

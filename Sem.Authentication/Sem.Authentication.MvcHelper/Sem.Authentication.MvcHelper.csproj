@@ -66,12 +66,15 @@
     <Compile Include="AppInfrastructure\AuditInfo.cs" />
     <Compile Include="AppInfrastructure\AuthenticationCheckAttribute.cs" />
     <Compile Include="AppInfrastructure\DebugAudit.cs" />
+    <Compile Include="AppInfrastructure\EventSourceAudit.cs" />
     <Compile Include="AppInfrastructure\EventLogAudit.cs" />
     <Compile Include="AppInfrastructure\Extensions.cs" />
     <Compile Include="AppInfrastructure\ISemAudit.cs" />
     <Compile Include="AppInfrastructure\ValidatedNotNullAttribute.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InAppIps\BaseGateAttribute.cs" />
+    <Compile Include="InAppIps\LandmineExtensions.cs" />
+    <Compile Include="InAppIps\LandmineAttribute.cs" />
     <Compile Include="InAppIps\Processing\ClientStatistic.cs" />
     <Compile Include="AppInfrastructure\ConfigurationBase.cs" />
     <Compile Include="AppInfrastructure\DebugLogger.cs" />

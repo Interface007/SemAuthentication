@@ -65,7 +65,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
             }
 
             var cache = HttpRuntime.Cache;
-            var key = "LastRequestKeay-" + clientId;
+            var key = "LastRequestKey-" + clientId;
             if (cache[key] != null)
             {
                 return false;

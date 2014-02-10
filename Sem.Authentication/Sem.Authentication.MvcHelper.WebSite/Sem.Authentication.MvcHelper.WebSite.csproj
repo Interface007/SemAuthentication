@@ -53,6 +53,9 @@
       <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource">
+      <HintPath>..\packages\Microsoft.Diagnostics.Tracing.EventSource.1.0.16\lib\net40\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.2.0.2\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -243,6 +246,9 @@
     <Content Include="Views\Home\OnlyOneRequestPerSecond.cshtml" />
     <Content Include="Views\Home\Fault.cshtml" />
     <Content Include="Views\Home\MinOneSecBetweenRequests.cshtml" />
+    <Content Include="_EventRegisterUsersGuide.docx" />
+    <Content Include="_EventSourceUsersGuide.docx" />
+    <Content Include="Views\Home\LandMineProtected.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -299,6 +305,11 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="..\packages\Microsoft.Diagnostics.Tracing.EventRegister.1.0.16\tools\Microsoft.Diagnostics.Tracing.EventRegister.targets" Condition="Exists('..\packages\Microsoft.Diagnostics.Tracing.EventRegister.1.0.16\tools\Microsoft.Diagnostics.Tracing.EventRegister.targets')" />
+  <Target Name="EnsureEventRegisterImported" BeforeTargets="BeforeBuild" Condition="'$(EventRegisterImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Diagnostics.Tracing.EventRegister.1.0.16\tools\Microsoft.Diagnostics.Tracing.EventRegister.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Diagnostics.Tracing.EventRegister.1.0.16\tools\Microsoft.Diagnostics.Tracing.EventRegister.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
