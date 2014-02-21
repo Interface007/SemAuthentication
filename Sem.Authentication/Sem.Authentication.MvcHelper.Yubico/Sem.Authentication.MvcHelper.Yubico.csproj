@@ -111,6 +111,10 @@
       <Project>{40F49E32-3BC6-442F-A6A8-DE77E44ED30B}</Project>
       <Name>Sem.Authentication.MvcHelper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sem.Authentication\Sem.Authentication.csproj">
+      <Project>{580F5C5A-032A-455E-82B3-0FC29E1677B9}</Project>
+      <Name>Sem.Authentication</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

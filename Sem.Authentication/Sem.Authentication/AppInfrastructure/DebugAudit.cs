@@ -1,32 +1,41 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISemAudit.cs" company="Sven Erik Matzen">
+// <copyright file="DebugAudit.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the ISemAudit type.
+//   Defines the DebugAudit type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.AppInfrastructure
+namespace Sem.Authentication.AppInfrastructure
 {
+    using System.Diagnostics;
+
     /// <summary>
-    /// In contrast to the logging, auditing does provide information about what did who when.
-    /// The aim of auditing is non-repudiation.
+    /// A sample implementation for <see cref="ISemAudit"/> that simply logs to the debug output.
     /// </summary>
-    public interface ISemAudit
+    public class DebugAudit : ISemAudit
     {
         /// <summary>
         /// Writes information about the failure of an action into the audit log.
         /// </summary>
         /// <typeparam name="T"> The type of detail data </typeparam>
         /// <param name="info"> The information about the user, the action and the details.  </param>
-        void AuthenticationCheckFailed<T>(AuditInfo<T> info);
+        public void AuthenticationCheckFailed<T>(AuditInfo<T> info)
+        {
+            info.ArgumentMustNotBeNull("info");
+            Debug.Print("FAILURE: User {0} did {1} - exception: {2}", info.User, info.Action, info.Details);
+        }
 
         /// <summary>
         /// Writes information about successes into the audit log.
         /// </summary>
         /// <typeparam name="T"> The type of detail data </typeparam>
         /// <param name="info"> The information about the user, the action and the details. </param>
-        void AuthenticationCheckSucceeded<T>(AuditInfo<T> info);
+        public void AuthenticationCheckSucceeded<T>(AuditInfo<T> info)
+        {
+            info.ArgumentMustNotBeNull("info");
+            Debug.Print("SUCCESS: User {0} did {1}", info.User, info.Action);
+        }
     }
 }

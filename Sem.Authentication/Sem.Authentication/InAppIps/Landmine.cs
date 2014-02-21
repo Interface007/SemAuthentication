@@ -1,45 +1,36 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LandmineAttribute.cs" company="Sven Erik Matzen">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Landmine.cs" company="Sven Erik Matzen">
 //   (c) 2013 Sven Erik Matzen
 // </copyright>
 // <summary>
-//   Defines the LandmineAttribute type.
+//   The landmine attribute does cache the value of a web landmine.
+//   The basic idea is to embed an http field that looks as an easy target for hackers. As soon as the
+//   content of the field is changed, the user will be locked out.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.InAppIps
+namespace Sem.Authentication.InAppIps
 {
     using System;
     using System.Web;
     using System.Web.Caching;
 
-    using Sem.Authentication.MvcHelper.AppInfrastructure;
-    using Sem.Authentication.MvcHelper.InAppIps.Processing;
+    using Sem.Authentication.AppInfrastructure;
 
     /// <summary>
     /// The landmine attribute does cache the value of a web landmine.
     /// The basic idea is to embed an http field that looks as an easy target for hackers. As soon as the 
     /// content of the field is changed, the user will be locked out.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class LandmineAttribute : BaseGateAttribute
+    public class Landmine : BaseGate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LandmineAttribute"/> class.
+        /// Initializes a new instance of the <see cref="Landmine"/> class.
         /// </summary>
-        public LandmineAttribute()
-            : this(typeof(SessionIdExtractor), typeof(UserHostExtractor))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LandmineAttribute"/> class.
-        /// </summary>
-        /// <param name="extractors">The types of extractors to use.</param>
-        public LandmineAttribute(params Type[] extractors)
-            : base(extractors)
+        public Landmine()
         {
             this.LandmineName = "Landmine";
+            this.ExpectedValue = "8008";
             this.Seconds = 120;
         }
 
@@ -55,6 +46,18 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         public string LandmineName { get; set; }
 
         /// <summary>
+        /// Gets or sets the expected value for the land mine.
+        /// </summary>
+        public string ExpectedValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the request area where to search for the landmine value.
+        /// </summary>
+        public RequestArea RequestArea { get; set; }
+
+        public bool AllowErrorInStatusText { get; set; }
+
+        /// <summary>
         /// The request gate does check the content of the request to check whether the 
         /// land mine is still intact or if it has been triggered by changing the content 
         /// into an unexpected value.
@@ -62,7 +65,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         /// <param name="clientId"> The client id. </param>
         /// <param name="request"> The request. </param>
         /// <returns> The <see cref="bool"/>. </returns>
-        protected override bool RequestGate(string clientId, HttpRequestBase request)
+        public override bool RequestGate(string clientId, HttpRequestBase request)
         {
             // no client id - nothing to do...
             if (string.IsNullOrEmpty(clientId))
@@ -79,7 +82,13 @@ namespace Sem.Authentication.MvcHelper.InAppIps
                 return false;
             }
 
-            if (request.Form[this.LandmineName] == "8008")
+            var currentValue =
+                this.RequestArea == RequestArea.Form ? request.Form[this.LandmineName] :
+                this.RequestArea == RequestArea.Header ? request.Headers[this.LandmineName] :
+                this.RequestArea == RequestArea.QueryString ? request.QueryString[this.LandmineName] :
+                string.Empty;
+
+            if (currentValue == this.ExpectedValue)
             {
                 return true;
             }

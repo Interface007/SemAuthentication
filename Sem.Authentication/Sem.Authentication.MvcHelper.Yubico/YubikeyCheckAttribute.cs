@@ -14,6 +14,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
     using System.Linq;
     using System.Web.Mvc;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
     using Sem.Authentication.MvcHelper.Yubico.Client;
     using Sem.Authentication.MvcHelper.Yubico.Exceptions;

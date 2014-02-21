@@ -14,6 +14,7 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     /// <summary>

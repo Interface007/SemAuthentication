@@ -54,11 +54,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -100,8 +112,11 @@
     <Compile Include="AppInfrastructure\ClassAuthenticationCheck.cs" />
     <Compile Include="AppInfrastructure\ClassExtensions.cs" />
     <Compile Include="AppInfrastructure\SampleAuthenticator.cs" />
+    <Compile Include="InAppIps\ClassBaseGateMvcAttribute.cs" />
+    <Compile Include="InAppIps\ClassLandmineExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InAppIps\ClassClientStatistic.cs" />
+    <Compile Include="InAppIps\ClassLandmineMvcAttribute.cs" />
     <Compile Include="InAppIps\ClassMinimumRequestTimeDistanceAttribute.cs" />
     <Compile Include="InAppIps\ClassFastRequestsProtectionAttribute.cs" />
     <Compile Include="InAppIps\ClassUserMapping.cs" />
@@ -118,6 +133,10 @@
     <ProjectReference Include="..\Sem.Authentication.MvcHelper\Sem.Authentication.MvcHelper.csproj">
       <Project>{40F49E32-3BC6-442F-A6A8-DE77E44ED30B}</Project>
       <Name>Sem.Authentication.MvcHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sem.Authentication\Sem.Authentication.csproj">
+      <Project>{580F5C5A-032A-455E-82B3-0FC29E1677B9}</Project>
+      <Name>Sem.Authentication</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

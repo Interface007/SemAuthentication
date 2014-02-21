@@ -98,12 +98,24 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.2\lib\net40\System.Web.Optimization.dll</HintPath>
@@ -176,14 +188,17 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ExpertsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Expert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -204,6 +219,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="WebAPISample.html" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
@@ -246,8 +262,6 @@
     <Content Include="Views\Home\OnlyOneRequestPerSecond.cshtml" />
     <Content Include="Views\Home\Fault.cshtml" />
     <Content Include="Views\Home\MinOneSecBetweenRequests.cshtml" />
-    <Content Include="_EventRegisterUsersGuide.docx" />
-    <Content Include="_EventSourceUsersGuide.docx" />
     <Content Include="Views\Home\LandMineProtected.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -255,7 +269,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sem.Authentication.MvcHelper.Yubico\Sem.Authentication.MvcHelper.Yubico.csproj">
@@ -265,6 +278,14 @@
     <ProjectReference Include="..\Sem.Authentication.MvcHelper\Sem.Authentication.MvcHelper.csproj">
       <Project>{40F49E32-3BC6-442F-A6A8-DE77E44ED30B}</Project>
       <Name>Sem.Authentication.MvcHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sem.Authentication.WebApiHelper\Sem.Authentication.WebApiHelper.csproj">
+      <Project>{46923478-54EA-4967-B9A9-D9A962E0D3AC}</Project>
+      <Name>Sem.Authentication.WebApiHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sem.Authentication\Sem.Authentication.csproj">
+      <Project>{580F5C5A-032A-455E-82B3-0FC29E1677B9}</Project>
+      <Name>Sem.Authentication</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

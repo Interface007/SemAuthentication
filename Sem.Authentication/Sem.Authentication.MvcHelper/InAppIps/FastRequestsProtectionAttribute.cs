@@ -10,20 +10,21 @@
 namespace Sem.Authentication.MvcHelper.InAppIps
 {
     using System;
-    using System.Collections.Concurrent;
-    using System.Diagnostics;
-    using System.Linq;
 
-    using Sem.Authentication.MvcHelper.AppInfrastructure;
-    using Sem.Authentication.MvcHelper.InAppIps.Processing;
+    using Sem.Authentication.InAppIps;
+    using Sem.Authentication.InAppIps.Processing;
 
     /// <summary>
     /// Decorates any MVC route that needs to have client requests limited by time. 
     /// This attribute protects against multiple fast requests from a single client.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public sealed class FastRequestsProtectionAttribute : BaseGateAttribute
+    public sealed class FastRequestsProtectionAttribute : BaseGateMvcAttribute
     {
+        /// <summary>
+        /// The gate instance.
+        /// </summary>
+        private readonly FastRequestsProtection instance = new FastRequestsProtection();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FastRequestsProtectionAttribute"/> class.
         /// </summary>
@@ -39,50 +40,49 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         public FastRequestsProtectionAttribute(params Type[] extractors)
             : base(extractors)
         {
-            this.MaxRetentionTimeOfStatistics = 3000;
+        }
+
+        /// <summary>
+        /// Gets the instance that implements the functionality of this gate.
+        /// </summary>
+        public override IGate Instance
+        {
+            get
+            {
+                return this.instance;
+            }
         }
 
         /// <summary>
         /// Gets or sets the maximum retention time in milliseconds of statistics - when a client does not issue requests in this period of time, we will remove the statistic.
         /// </summary>
-        public int MaxRetentionTimeOfStatistics { get; set; }
+        public int MaxRetentionTimeOfStatistics
+        {
+            get
+            {
+                return this.instance.MaxRetentionTimeOfStatistics;
+            }
+
+            set
+            {
+                this.instance.MaxRetentionTimeOfStatistics = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the requests per second the client is allowed to do.
         /// </summary>
-        public int RequestsPerSecondAndClient { get; set; }
-
-        /// <summary>
-        /// The statistics gate does check the clients statistics and prohibits further processing of the request if the client
-        /// requests this resource too often.
-        /// </summary>
-        /// <param name="clientId"> The client ID may be a session id or a client IP.  </param>
-        /// <param name="statistics"> The statistics collection that match the type of the client id.  </param>
-        /// <returns> A value indicating whether the client is allowed to go on. </returns>
-        protected override bool StatisticsGate(string clientId, ConcurrentDictionary<string, ClientStatistic> statistics)
+        public int RequestsPerSecondAndClient
         {
-            // no client id - nothing to do...
-            if (string.IsNullOrEmpty(clientId))
+            get
             {
-                return true;
+                return this.instance.RequestsPerSecondAndClient;
             }
 
-            statistics.ArgumentMustNotBeNull("statistics");
-
-            // cleanup old statistics (we will not take care for clients that are slower than 1 request per X millisec.)
-            var time = DateTime.UtcNow.AddMilliseconds(-this.MaxRetentionTimeOfStatistics);
-            foreach (var statistic in statistics.Where(x => x.Value.LastRequest < time).ToArray())
+            set
             {
-                ClientStatistic value;
-                statistics.TryRemove(statistic.Key, out value);
+                this.instance.RequestsPerSecondAndClient = value;
             }
-
-            var clientStatistic = statistics.GetOrAdd(clientId, new ClientStatistic());
-            clientStatistic.IncreaseRequestCount();
-
-            var requestsPerSecond = clientStatistic.RequestsPerSecond;
-            Debug.Print("client statistic for ID {0}: {1} requests per second ({2}|{3}) {4}", clientId, requestsPerSecond, clientStatistic.FirstRequest, clientStatistic.LastRequest, clientStatistic.Id);
-            return requestsPerSecond <= this.RequestsPerSecondAndClient;
         }
     }
 }

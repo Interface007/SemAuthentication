@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Sample for WebAPI</title>
+    <link href="/Content/bootstrap.css" rel="stylesheet" />
+    <link href="/Content/site.css" rel="stylesheet" />
+
+    <script src="/Scripts/modernizr-2.7.1.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Sem.Authentication.MvcHelper</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/Home/About">About</a></li>
+                    <li><a href="/Home/Contact">Contact</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/Account/Register" id="registerLink">Register</a></li>
+                    <li><a href="/Account/Login" id="loginLink">Log in</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <div class="jumbotron">
+            <h1>Landmine for WebAPI</h1>
+            <p class="lead">This web page does implement a sample request to a WebAPI controller that is protected by a "landmine". 
+                The concept is really simple: you add some known value to a field as a kind of "honey pot" for an adversary to play with. 
+                As soon as the adversary changes the value, you know that something fishy is going on.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h2>All eXperts</h2>
+                <ul id="experts"></ul>
+            </div>
+            <div class="col-md-4">
+                <h2>Search by ID</h2>
+                <input type="text" id="Id" size="5" value="123" />
+                <input type="button" value="Search" onclick="find();" />
+                <input type="hidden" name="" value="" />
+                <p id="expert1" />
+            </div>
+            <div class="col-md-4">
+                <h2>Wrong landmine value</h2>
+                <p>Normally this happens when an adversary finds the field "accesslevel" and changes the field value from "public" to "private" or "secret" to see if it's possible to escalate privileges.</p>
+                <input type="text" id="Id" size="5" value="123" />
+                <input type="button" value="Search" onclick="findWithWrongValue();" />
+                <input type="hidden" name="" value="" />
+                <p id="expert2" />
+            </div>
+        </div>
+
+        <hr />
+        <footer>
+            <p>&copy; 2014 - Sven Erik Matzen</p>
+        </footer>
+    </div>
+
+    <script src="/Scripts/jquery-2.0.3.js"></script>
+
+    <script src="/Scripts/bootstrap.js"></script>
+    <script src="/Scripts/respond.js"></script>
+
+    <script>
+        var uri = 'api/Experts';
+
+        $(document).ready(function () {
+            $.ajax({
+                url: uri,
+                dataType: 'json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('accesslevel', 'public');
+                },
+                success: function (data) {
+                    // On success, 'data' contains a list of products.
+                    $.each(data, function (key, item) {
+                        // Add a list item for the product.
+                        $('<li>', { text: formatItem(item) }).appendTo($('#experts'));
+                    }
+                    );
+                }
+            });
+        });
+
+        function formatItem(item) {
+            return item.Id + ' - ' + item.FullName + ': Level ' + item.Experience;
+        }
+
+        function find() {
+            var id = $('#Id').val();
+            $.ajax({
+                url: uri + '/' + id,
+                dataType: 'json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('accesslevel', 'public');
+                },
+                success: function (data) {
+                    $('#expert1').text(formatItem(data));
+                },
+                error: function (jqXHR, textStatus, err) {
+                    $('#expert1').text('Error: ' + err + ' ... you might have modified the request? If so, you will be locked out for the next 10 seconds.');
+                }
+            });
+        }
+
+        function findWithWrongValue() {
+            var id = $('#Id').val();
+            $.ajax({
+                url: uri + '/' + id,
+                dataType: 'json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('accesslevel', 'private');
+                },
+                success: function (data) {
+                    $('#expert2').text(formatItem(data));
+                },
+                error: function (jqXHR, textStatus, err) {
+                    $('#expert2').text('Error: ' + err + ' ... you might have modified the request? If so, you will be locked out for the next 10 seconds.');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

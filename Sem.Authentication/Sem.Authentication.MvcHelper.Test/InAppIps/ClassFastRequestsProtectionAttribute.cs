@@ -41,6 +41,17 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             }
         }
 
+        [TestClass]
+        public class RequestsPerSecondAndClient
+        {
+            [TestMethod]
+            public void SetterAndGetterInSync()
+            {
+                var target = new FastRequestsProtectionAttribute { RequestsPerSecondAndClient = 42 };
+                Assert.AreEqual(42, target.RequestsPerSecondAndClient);
+            }
+        }
+
         /// <summary>
         /// Tests for implementing the assumed interfaces.
         /// </summary>

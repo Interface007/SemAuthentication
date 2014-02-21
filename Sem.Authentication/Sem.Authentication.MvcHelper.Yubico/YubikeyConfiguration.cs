@@ -16,6 +16,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
     using System.Web;
     using System.Xml.Serialization;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     /// <summary>

@@ -8,6 +8,7 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     public static class ClassUserMapping

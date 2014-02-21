@@ -11,7 +11,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.AppInfrastructure
+namespace Sem.Authentication.AppInfrastructure
 {
     using System;
     using System.Diagnostics;

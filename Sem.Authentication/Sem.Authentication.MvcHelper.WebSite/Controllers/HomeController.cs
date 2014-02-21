@@ -12,8 +12,8 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
     using System;
     using System.Web.Mvc;
 
+    using Sem.Authentication.InAppIps.Processing;
     using Sem.Authentication.MvcHelper.InAppIps;
-    using Sem.Authentication.MvcHelper.InAppIps.Processing;
     using Sem.Authentication.MvcHelper.Yubico;
 
     /// <summary>
@@ -111,7 +111,7 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
         /// The land mine protected view that simply shows the success of an action.
         /// </summary>
         /// <returns> The <see cref="ActionResult"/>. </returns>
-        [Landmine(typeof(UserHostExtractor))]
+        [LandmineMvc(typeof(UserHostExtractor))]
         public ActionResult LandMineProtected()
         {
             return this.View();

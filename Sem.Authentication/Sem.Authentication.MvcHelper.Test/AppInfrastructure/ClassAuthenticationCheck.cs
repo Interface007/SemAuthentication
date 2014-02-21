@@ -15,6 +15,7 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     public static class ClassAuthenticationCheck
@@ -40,7 +41,7 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
                     {
                         Audit = new TypeConfiguration
                         {
-                            TypeName = "Sem.Authentication.MvcHelper.AppInfrastructure.DebugAudit, Sem.Authentication.MvcHelper",
+                            TypeName = "Sem.Authentication.AppInfrastructure.DebugAudit, Sem.Authentication",
                         }
                     };
 
@@ -58,7 +59,7 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
                     {
                         Audit = new TypeConfiguration
                         {
-                            TypeName = "Sem.Authentication.MvcHelper.AppInfrastructure.DebugAudit, Sem.Authentication.MvcHelper",
+                            TypeName = "Sem.Authentication.AppInfrastructure.DebugAudit, Sem.Authentication",
                         }
                     };
 
@@ -80,7 +81,7 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
                     {
                         Logger = new TypeConfiguration
                                         {
-                                            TypeName = "Sem.Authentication.MvcHelper.AppInfrastructure.DebugLogger, Sem.Authentication.MvcHelper",
+                                            TypeName = "Sem.Authentication.AppInfrastructure.DebugLogger, Sem.Authentication",
                                         }
                     };
 

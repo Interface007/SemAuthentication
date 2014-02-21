@@ -11,11 +11,14 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Threading.Tasks;
+    using System.Web;
     using System.Web.Mvc;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using Sem.Authentication.InAppIps.Processing;
     using Sem.Authentication.MvcHelper.InAppIps;
 
     /// <summary>
@@ -39,6 +42,31 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
                 var target = new MinimumRequestTimeDistanceAttribute();
                 Assert.AreEqual(1, target.Seconds);
             }
+
+            [TestMethod]
+            public void InitializesDefaultExtractors()
+            {
+                var target = new MinimumRequestTimeDistanceAttribute();
+                Assert.IsTrue(target.ContextProcessors.Any(x => x.IdExtractor is SessionIdExtractor));
+                Assert.IsTrue(target.ContextProcessors.Any(x => x.IdExtractor is UserHostExtractor));
+            }
+
+            [TestMethod]
+            public void InitializesExplicitExtractors()
+            {
+                var target = new MinimumRequestTimeDistanceAttribute(new[] { typeof(EmptyExtractor) });
+                Assert.AreEqual(1, target.ContextProcessors.Count());
+                Assert.IsTrue(target.ContextProcessors.Any(x => x.IdExtractor is EmptyExtractor));
+            }
+
+            [ExcludeFromCodeCoverage]
+            public class EmptyExtractor : IIdExtractor
+            {
+                public string Extract(HttpContextBase context)
+                {
+                    return string.Empty;
+                }
+            }
         }
 
         /// <summary>
@@ -55,6 +83,39 @@ namespace Sem.Authentication.MvcHelper.Test.InAppIps
             {
                 var target = new MinimumRequestTimeDistanceAttribute();
                 Assert.IsInstanceOfType(target, typeof(ActionFilterAttribute));
+            }
+        }
+
+        [TestClass]
+        public class Message
+        {
+            [TestMethod]
+            public void SetterAndGetterInSync()
+            {
+                var target = new MinimumRequestTimeDistanceAttribute { Message = "ccccccbughknjbvlcldddtvfbkbivrbegdtuccridudr" };
+                Assert.AreEqual("ccccccbughknjbvlcldddtvfbkbivrbegdtuccridudr", target.Message);
+            }
+        }
+
+        [TestClass]
+        public class Seconds
+        {
+            [TestMethod]
+            public void SetterAndGetterInSync()
+            {
+                var target = new MinimumRequestTimeDistanceAttribute { Seconds = 42 };
+                Assert.AreEqual(42, target.Seconds);
+            }
+        }
+
+        [TestClass]
+        public class Name
+        {
+            [TestMethod]
+            public void SetterAndGetterInSync()
+            {
+                var target = new MinimumRequestTimeDistanceAttribute { Name = "ccccccbughkndndufnhfjfthfnhhucdjleuktvcrgtnl" };
+                Assert.AreEqual("ccccccbughkndndufnhfjfthfnhhucdjleuktvcrgtnl", target.Name);
             }
         }
 

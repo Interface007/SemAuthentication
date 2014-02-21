@@ -120,6 +120,10 @@
       <Project>{40F49E32-3BC6-442F-A6A8-DE77E44ED30B}</Project>
       <Name>Sem.Authentication.MvcHelper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sem.Authentication\Sem.Authentication.csproj">
+      <Project>{580F5C5A-032A-455E-82B3-0FC29E1677B9}</Project>
+      <Name>Sem.Authentication</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Shared\CustomDictionary.xml">

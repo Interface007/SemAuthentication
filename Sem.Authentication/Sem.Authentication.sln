@@ -20,6 +20,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet\Sem.Authentication.1.0.0.nuspec = NuGet\Sem.Authentication.1.0.0.nuspec
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication.WebApiHelper", "Sem.Authentication.WebApiHelper\Sem.Authentication.WebApiHelper.csproj", "{46923478-54EA-4967-B9A9-D9A962E0D3AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication", "Sem.Authentication\Sem.Authentication.csproj", "{580F5C5A-032A-455E-82B3-0FC29E1677B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sem.Authentication.Test", "Sem.Authentication.Test\Sem.Authentication.Test.csproj", "{2D09A265-A3CC-487D-B08C-3E437B5EF3D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3F5238D0-5E32-46AF-91E3-0CCB5513C3E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filters", "Filters", "{3B436FD1-7417-48A6-83C1-12DE10BFC31D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU
@@ -55,8 +65,35 @@ Global
 		{C02300E3-D044-4C1D-9FE3-58B6344DB69C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C02300E3-D044-4C1D-9FE3-58B6344DB69C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C02300E3-D044-4C1D-9FE3-58B6344DB69C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46923478-54EA-4967-B9A9-D9A962E0D3AC}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{46923478-54EA-4967-B9A9-D9A962E0D3AC}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{46923478-54EA-4967-B9A9-D9A962E0D3AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46923478-54EA-4967-B9A9-D9A962E0D3AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46923478-54EA-4967-B9A9-D9A962E0D3AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46923478-54EA-4967-B9A9-D9A962E0D3AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{580F5C5A-032A-455E-82B3-0FC29E1677B9}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{580F5C5A-032A-455E-82B3-0FC29E1677B9}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{580F5C5A-032A-455E-82B3-0FC29E1677B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{580F5C5A-032A-455E-82B3-0FC29E1677B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{580F5C5A-032A-455E-82B3-0FC29E1677B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{580F5C5A-032A-455E-82B3-0FC29E1677B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D09A265-A3CC-487D-B08C-3E437B5EF3D2}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{2D09A265-A3CC-487D-B08C-3E437B5EF3D2}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{2D09A265-A3CC-487D-B08C-3E437B5EF3D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D09A265-A3CC-487D-B08C-3E437B5EF3D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D09A265-A3CC-487D-B08C-3E437B5EF3D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D09A265-A3CC-487D-B08C-3E437B5EF3D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{78FBCC48-4ADC-496B-BCE2-9941F356F9F3} = {3F5238D0-5E32-46AF-91E3-0CCB5513C3E6}
+		{C02300E3-D044-4C1D-9FE3-58B6344DB69C} = {3F5238D0-5E32-46AF-91E3-0CCB5513C3E6}
+		{2D09A265-A3CC-487D-B08C-3E437B5EF3D2} = {3F5238D0-5E32-46AF-91E3-0CCB5513C3E6}
+		{580F5C5A-032A-455E-82B3-0FC29E1677B9} = {3B436FD1-7417-48A6-83C1-12DE10BFC31D}
+		{40F49E32-3BC6-442F-A6A8-DE77E44ED30B} = {3B436FD1-7417-48A6-83C1-12DE10BFC31D}
+		{C0147F75-A32D-448B-AE10-8A3F1D9446DF} = {3B436FD1-7417-48A6-83C1-12DE10BFC31D}
+		{46923478-54EA-4967-B9A9-D9A962E0D3AC} = {3B436FD1-7417-48A6-83C1-12DE10BFC31D}
 	EndGlobalSection
 EndGlobal

@@ -12,6 +12,8 @@ namespace Sem.Authentication.MvcHelper.AppInfrastructure
     using System;
     using System.Web.Mvc;
 
+    using Sem.Authentication.AppInfrastructure;
+
     /// <summary>
     /// The authentication check base class.
     /// </summary>

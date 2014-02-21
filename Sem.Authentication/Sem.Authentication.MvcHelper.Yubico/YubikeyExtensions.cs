@@ -13,6 +13,7 @@ namespace Sem.Authentication.MvcHelper.Yubico
     using System.Web;
     using System.Web.Mvc;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     /// <summary>

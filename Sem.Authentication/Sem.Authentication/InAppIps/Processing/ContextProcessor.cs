@@ -7,15 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.InAppIps.Processing
+namespace Sem.Authentication.InAppIps.Processing
 {
     using System;
     using System.Collections.Concurrent;
 
+    using Sem.Authentication.Processing;
+
     /// <summary>
     /// The context processor.
     /// </summary>
-    internal class ContextProcessor
+    public class ContextProcessor
     {
         /// <summary>
         /// The global client statistics - shared by all instances and threads.

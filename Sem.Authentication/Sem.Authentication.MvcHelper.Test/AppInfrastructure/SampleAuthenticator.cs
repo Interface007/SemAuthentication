@@ -13,6 +13,7 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
     using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     [ExcludeFromCodeCoverage]

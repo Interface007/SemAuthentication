@@ -20,6 +20,7 @@ namespace Sem.Authentication.MvcHelper.Yubico.Test
 
     using Moq;
 
+    using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
     using Sem.Authentication.MvcHelper.Test;
     using Sem.Authentication.MvcHelper.Yubico;

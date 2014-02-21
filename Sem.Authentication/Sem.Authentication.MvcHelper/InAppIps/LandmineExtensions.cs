@@ -16,7 +16,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
 
     /// <summary>
     /// The landmine extensions enables you to add a land mine into the view. This must be used in conjunction with
-    /// the <see cref="LandmineAttribute"/> in order to work.
+    /// the <see cref="LandmineMvcAttribute"/> in order to work.
     /// </summary>
     public static class LandmineExtensions
     {
@@ -41,7 +41,7 @@ namespace Sem.Authentication.MvcHelper.InAppIps
         }
 
         /// <summary>
-        /// Generates an expected value. The <see cref="LandmineAttribute"/> will be able to recognize this value as "ok".
+        /// Generates an expected value. The <see cref="LandmineMvcAttribute"/> will be able to recognize this value as "ok".
         /// </summary>
         /// <param name="fieldName"> The field name. </param>
         /// <returns> The <see cref="string"/>. </returns>

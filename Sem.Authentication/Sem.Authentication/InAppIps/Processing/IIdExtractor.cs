@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Sem.Authentication.MvcHelper.InAppIps.Processing
+namespace Sem.Authentication.InAppIps.Processing
 {
     using System.Web;
 
