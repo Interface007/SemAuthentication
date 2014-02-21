@@ -10,6 +10,7 @@
 namespace Sem.Authentication.AppInfrastructure
 {
     using System.Linq;
+    using System.Web;
     using System.Web.Routing;
 
     /// <summary>
@@ -55,6 +56,17 @@ namespace Sem.Authentication.AppInfrastructure
         {
             this.User = user;
             this.Action = action;
+        }
+
+        public AuditInfo(HttpContextBase httpContext)
+        {
+            this.User = httpContext.User.Identity.Name;
+        }
+
+        public AuditInfo(HttpContextBase httpContext, T exception)
+            : this(httpContext)
+        {
+            this.Details = exception;
         }
 
         /// <summary>
