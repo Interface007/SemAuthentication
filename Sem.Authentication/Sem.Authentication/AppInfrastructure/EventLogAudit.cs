@@ -46,8 +46,8 @@ namespace Sem.Authentication.AppInfrastructure
             catch (System.Security.SecurityException ex)
             {
                 const string Message = "There is an issue with checking or creating the EventSource for writing audit information into the event log. "
-                                       + "You should check permissions for the technical user this application runs with. "
-                                       + "See https://semauthentication.codeplex.com/wikipage?title=EventLogAudit%20Security%20Exception&referringTitle=Documentation for more information about this error.";
+                                     + "You should check permissions for the technical user this application runs with. "
+                                     + "See https://semauthentication.codeplex.com/wikipage?title=EventLogAudit%20Security%20Exception&referringTitle=Documentation for more information about this error.";
 
                 throw new InvalidOperationException(Message, ex);
             }

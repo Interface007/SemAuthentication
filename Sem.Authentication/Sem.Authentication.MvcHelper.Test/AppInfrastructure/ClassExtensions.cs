@@ -11,8 +11,13 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Security.Principal;
+    using System.Web;
+    using System.Web.Routing;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using Moq;
 
     using Sem.Authentication.AppInfrastructure;
     using Sem.Authentication.MvcHelper.AppInfrastructure;
@@ -117,6 +122,54 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
             public void ThrowsNotIfArgumentIsNotNull()
             {
                 new AuditInfo<Exception>("name", "action").ArgumentPropertyMustNotBeNull("sample", "User", x => x.User);
+            }
+        }
+
+        /// <summary>
+        /// Tests the method <see cref="Extensions.ArgumentPropertyMustNotBeNull{T,TParameter}"/>.
+        /// </summary>
+        [TestClass]
+        public class Constructor
+        {
+            /// <summary>
+            /// The constructor with the http context should extract the user name from the users identity.
+            /// </summary>
+            [TestMethod]
+            public void InitializesTheUserName()
+            {
+                var httpContext = new Mock<HttpContextBase>();
+                var principal = new Mock<IPrincipal>();
+                var identity = new Mock<IIdentity>();
+
+                identity.Setup(x => x.Name).Returns("Sven");
+                principal.Setup(x => x.Identity).Returns(identity.Object);
+                httpContext.Setup(x => x.User).Returns(principal.Object);
+                
+                var target = new AuditInfo<Exception>(httpContext.Object)
+                    .ArgumentPropertyMustNotBeNull("sample", "User", x => x.User);
+
+                Assert.AreEqual("Sven", target.User);
+            }
+        
+            /// <summary>
+            /// The constructor with the http context should extract the user name from the users identity and set the exception for the details.
+            /// </summary>
+            [TestMethod]
+            public void InitializesTheUserNameAndException()
+            {
+                var httpContext = new Mock<HttpContextBase>();
+                var principal = new Mock<IPrincipal>();
+                var identity = new Mock<IIdentity>();
+
+                identity.Setup(x => x.Name).Returns("Sven");
+                principal.Setup(x => x.Identity).Returns(identity.Object);
+                httpContext.Setup(x => x.User).Returns(principal.Object);
+                
+                var target = new AuditInfo<Exception>(httpContext.Object, new Exception("Hello"))
+                    .ArgumentPropertyMustNotBeNull("sample", "User", x => x.User);
+
+                Assert.AreEqual("Sven", target.User);
+                Assert.AreEqual("Hello", target.Details.Message);
             }
         }
     }

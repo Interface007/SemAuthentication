@@ -17,8 +17,14 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
     using Sem.Authentication.MvcHelper.WebSite.Models;
     using Sem.Authentication.WebApiHelper.InAppIps;
 
+    /// <summary>
+    /// Sample WebAPI controller.
+    /// </summary>
     public class ExpertsController : ApiController
     {
+        /// <summary>
+        /// The test model.
+        /// </summary>
         private readonly List<Expert> model = new List<Expert>
             {
                 new Expert { Id = 123, FullName = "Wolfgang Amadeus Mozart", Experience = 100 }, 
@@ -26,13 +32,25 @@ namespace Sem.Authentication.MvcHelper.WebSite.Controllers
                 new Expert { Id = 125, FullName = "Richard Wagner", Experience = 120 }, 
             };
 
-        // GET api/<controller>
+        /// <summary>
+        /// The get method for the list of experts.
+        /// </summary>
+        /// <returns> The <see cref="IEnumerable{T}"/>. </returns>
         public IEnumerable<Expert> Get()
         {
             return this.model;
         }
 
-        // GET api/<controller>/5
+
+        /// <summary>
+        /// GET API/{controller}/5
+        /// </summary>
+        /// <param name="id"> The id of the expert to get. </param>
+        /// <remarks>
+        /// This method does check the landmine using the attribute <see cref="LandmineWebApiAttribute"/>. As soon as 
+        /// the request does not contain the expected value, the client will be locked out.
+        /// </remarks>
+        /// <returns> The <see cref="IEnumerable{T}"/>. </returns>
         [LandmineWebApi(LandmineName = "accesslevel", ExpectedValue = "public", RequestArea = RequestArea.Header, Seconds = 10)]
         public Expert Get(int id)
         {

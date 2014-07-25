@@ -58,11 +58,26 @@ namespace Sem.Authentication.AppInfrastructure
             this.Action = action;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditInfo{T}"/> class.
+        /// </summary>
+        /// <param name="httpContext">
+        /// The http context to get the user name from.
+        /// </param>
         public AuditInfo(HttpContextBase httpContext)
         {
             this.User = httpContext.User.Identity.Name;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditInfo{T}"/> class.
+        /// </summary>
+        /// <param name="httpContext">
+        /// The http context to get the user name from.
+        /// </param>
+        /// <param name="exception">
+        /// The exception to get the details from.
+        /// </param>
         public AuditInfo(HttpContextBase httpContext, T exception)
             : this(httpContext)
         {
