@@ -13,14 +13,12 @@ namespace Sem.Authentication.MvcHelper.Test.AppInfrastructure
     using System.Diagnostics.CodeAnalysis;
     using System.Security.Principal;
     using System.Web;
-    using System.Web.Routing;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Moq;
 
     using Sem.Authentication.AppInfrastructure;
-    using Sem.Authentication.MvcHelper.AppInfrastructure;
 
     /// <summary>
     /// Tests the methods of the class <see cref="Extensions"/>.
