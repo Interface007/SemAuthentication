@@ -37,15 +37,13 @@ Modify an ASP.Net-MVC controller action to require the user to enter a One-Time-
 Adding the UI-Elements to render an input box for the One-Time-Password. The only modification of the original view was to add the row "@Html.YubikeyInput(Url.Action("Edit")) <br />". This renders an additional image and an input-box with the name "yubiKey". The value of this input-box will be validated if the attribute "YubikeyCheck" has been added to a controller action.  
 
 <div style="color:Black; background-color:White">
-
-<pre><div <span style="color:Blue">class</span>=<span style="color:#A31515">"form-group"</span>>
-    <div <span style="color:Blue">class</span>=<span style="color:#A31515">"col-md-offset-2 col-md-10"</span>>
-        @Html.YubikeyInput(Url.Action(<span style="color:#A31515">"Edit"</span>)) <br />
-        <input type=<span style="color:#A31515">"submit"</span> value=<span style="color:#A31515">"Save"</span> <span style="color:Blue">class</span>=<span style="color:#A31515">"btn btn-default"</span> />
-    </div>
-</div>
+<pre>
+<span style="color:Blue">class</span>=<span style="color:#A31515">"form-group"</span>
+<span style="color:Blue">class</span>=<span style="color:#A31515">"col-md-offset-2 col-md-10"</span>
+@Html.YubikeyInput(Url.Action(<span style="color:#A31515">"Edit"</span>)) <br />
+<input type=<span style="color:#A31515">"submit"</span> value=<span style="color:#A31515">"Save"</span>
+<span style="color:Blue">class</span>=<span style="color:#A31515">"btn btn-default"</span>
 </pre>
-
 </div>
 
 ## Fast repetitive request protection
