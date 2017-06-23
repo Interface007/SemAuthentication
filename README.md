@@ -38,11 +38,12 @@ Adding the UI-Elements to render an input box for the One-Time-Password. The onl
 
 <div style="color:Black; background-color:White">
 <pre>
-<span style="color:Blue">class</span>=<span style="color:#A31515">"form-group"</span>
-<span style="color:Blue">class</span>=<span style="color:#A31515">"col-md-offset-2 col-md-10"</span>
-@Html.YubikeyInput(Url.Action(<span style="color:#A31515">"Edit"</span>)) <br />
-<input type=<span style="color:#A31515">"submit"</span> value=<span style="color:#A31515">"Save"</span>
-<span style="color:Blue">class</span>=<span style="color:#A31515">"btn btn-default"</span>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        @Html.YubikeyInput(Url.Action("Edit")) <br />
+        <input type="submit" value="Save" class="btn btn-default" />
+    </div>
+</div>
 </pre>
 </div>
 
